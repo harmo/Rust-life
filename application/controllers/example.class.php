@@ -6,8 +6,12 @@ class Example extends Controller {
     }
 
     function index(){
-        $example = $this->loadModel('ExampleTest');
-        var_dump($example->test());
+        $exampleModel = $this->loadModel('ExampleTest');
+        $test = $exampleModel->test();
+
+        $exampleView = $this->loadView('test');
+        $exampleView->set('test', $test);
+        $exampleView->render();
     }
 
 }
