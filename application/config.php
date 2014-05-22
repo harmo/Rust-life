@@ -8,5 +8,5 @@ $config['db_username'] = 'rust';
 $config['db_password'] = 'inijulir56';
 $config['autoload'] = array(
     'plugins' => array(),
-    'helpers' => array('session')
+    'helpers' => array('session', 'url', 'staticFiles')
 );

@@ -1,5 +1,4 @@
 <?php
-
 class Controller {
 
     function __construct(){
@@ -19,6 +18,7 @@ class Controller {
                 }
 
                 $funcName = 'load' . ucfirst( substr($type, 0, -1) );
+
                 foreach($payload as $toLoad){
                     if(!method_exists($this, $funcName)){
                         throw new Exception($funcName.' is not an existant method');

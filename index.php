@@ -3,7 +3,7 @@ session_start();
 error_reporting(E_ALL);
 
 
-define('ROOT_DIR', realpath(dirname(__FILE__)) .'/');
+define('ROOT_DIR', realpath(dirname(__FILE__)).'/');
 define('APP_DIR', ROOT_DIR .'application/');
 
 require(APP_DIR.'config.php');

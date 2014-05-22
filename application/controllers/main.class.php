@@ -8,6 +8,7 @@ class Main extends Controller {
     function index(){
         $user = $this->session->get('user');
         $template = $this->loadView('main');
+        $template->set('static', $this->staticFiles);
         $template->render();
     }
 
