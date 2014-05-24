@@ -12,7 +12,7 @@
 
             <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="admin/users">Membres</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>admin/users">Membres</a></li>
                 </ul>
             </div>
         </div>

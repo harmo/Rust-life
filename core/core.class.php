@@ -2,6 +2,7 @@
 class Core {
 
     private $config;
+    private $mode;
     private $controller;
     private $action;
     private $url;
@@ -29,8 +30,15 @@ class Core {
 
         // Create object and call method
         $obj = new $this->controller;
-        $args = array_slice($this->url_segments, 2, 1);
-        die(call_user_func_array(array($obj, $this->action), $args));
+        $this->mode = $obj->mode;
+        if($this->mode == $this->config['base_template_admin']){
+            $args = array_slice($this->url_segments, 1, 2);
+            $action = isset($args[1]) ? array(array($args[0] => $args[1])) : array();
+        }
+        else {
+            $action = array_slice($this->url_segments, 2, 1);
+        }
+        die(call_user_func_array(array($obj, $this->action), $action));
     }
 
     private function getCleanedUrl(){
@@ -58,6 +66,9 @@ class Core {
             require_once(APP_DIR.'controllers/'.$this->controller . '.class.php');
         }
 
+        if($this->controller == $this->config['base_template_admin']){
+            $this->action = 'index';
+        }
         // Check the action exists
         if(!method_exists($this->controller, $this->action)){
             $this->controller = $this->config['error_controller'];

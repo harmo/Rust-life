@@ -1,7 +1,7 @@
 <?php
 class Controller {
 
-    private $mode;
+    public $mode;
 
     function __construct($mode = 'user'){
         $this->mode = $mode;

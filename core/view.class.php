@@ -67,6 +67,7 @@ class View {
     }
 
     public function content(){
+        extract($this->pageVars);
         include($this->template);
     }
 
