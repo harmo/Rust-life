@@ -5,18 +5,13 @@
     <?php include 'css.tpl.php'; ?>
 </head>
 <body>
-
-    <div class="header">
-        HEADER
-    </div>
+    <?php include 'navbar.tpl.php' ?>
 
     <div class="wrapper-content">
         <?php echo $this->content(); ?>
     </div>
 
-    <div class="footer">
-        FOOTER
-    </div>
+    <?php include 'footer.tpl.php' ?>
 
     <?php include 'scripts.tpl.php'; ?>
 </body>
