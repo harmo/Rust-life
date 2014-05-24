@@ -6,8 +6,12 @@ class Main extends Controller {
     }
 
     function index(){
-        $user = $this->session->get('user');
+        global $config;
         $template = $this->loadView('main');
+        $template->set('static', $this->staticFiles);
+        $template->set('title', $config['project']);
+        $template->addCss('main');
+        //$user = $this->session->get('user');
         $template->render();
     }
 
