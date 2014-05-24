@@ -1,7 +1,10 @@
 <?php
 class Controller {
 
-    function __construct(){
+    private $mode;
+
+    function __construct($mode = 'user'){
+        $this->mode = $mode;
         $this->autoload();
     }
 
@@ -47,7 +50,7 @@ class Controller {
     }
 
     public function loadView($name){
-        $view = new View($name);
+        $view = new View($name, $this->mode);
         return $view;
     }
 

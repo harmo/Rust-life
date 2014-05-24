@@ -29,7 +29,8 @@ class Core {
 
         // Create object and call method
         $obj = new $this->controller;
-        die(call_user_func_array(array($obj, $this->action), array_slice($this->url_segments, 2)));
+        $args = array_slice($this->url_segments, 2, 1);
+        die(call_user_func_array(array($obj, $this->action), $args));
     }
 
     private function getCleanedUrl(){

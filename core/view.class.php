@@ -2,15 +2,18 @@
 class View {
 
     private $my_controller;
+    private $mode;
     private $pageVars;
     private $template;
     private $extra_css = array();
     private $extra_js = array();
 
-    public function __construct($template){
+    public function __construct($template, $mode){
         $this->my_controller = $template;
+        $this->mode = $mode;
         $this->template = APP_DIR .'views/'. $template .'.php';
         $this->pageVars = array(
+            'title' => '',
             'extra_css' => null,
             'extra_js' => null
         );
@@ -21,9 +24,15 @@ class View {
     }
 
     public function render(){
+        global $config;
         extract($this->pageVars);
         ob_start();
-        require(APP_DIR .'views/components/base.tpl.php');
+        if($this->mode == $config['base_template_admin']){
+            require(APP_DIR .'views/components/admin/'.$config['base_template_admin'].'.tpl.php');
+        }
+        else {
+            require(APP_DIR .'views/components/'.$config['base_template'].'.tpl.php');
+        }
         echo ob_get_clean();
     }
 

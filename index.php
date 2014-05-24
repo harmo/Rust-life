@@ -17,4 +17,5 @@ require(ROOT_DIR.'core/core.class.php');
 
 global $config;
 define('BASE_URL', $config['base_url']);
+
 $core = new Core($config);
