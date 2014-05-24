@@ -1,7 +1,10 @@
 <?php
 session_start();
 error_reporting(E_ALL);
+date_default_timezone_set('Europe/Paris');
 
+$dev = gethostname() != 'rust-life.fr' ? true : false;
+define('DEV', $dev);
 
 define('ROOT_DIR', realpath(dirname(__FILE__)).'/');
 define('APP_DIR', ROOT_DIR .'application/');
