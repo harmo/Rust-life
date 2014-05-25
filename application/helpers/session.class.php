@@ -12,4 +12,10 @@ class Session {
         return false;
     }
 
+    function delete($key){
+        if(isset($_SESSION[$key])){
+            unset($_SESSION[$key]);
+        }
+    }
+
 }

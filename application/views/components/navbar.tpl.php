@@ -15,6 +15,11 @@
                     <?php if(isset($user) && $user): ?>
                         <?php if($user->is_admin): ?>
                             <li><a href="<?php echo BASE_URL; ?>admin">Administration</a></li>
+                            <li><a href="<?php echo BASE_URL; ?>clan">Clan</a></li>
+                            <li><a href="<?php echo BASE_URL; ?>infos">Informations</a></li>
+                            <li><a href="<?php echo BASE_URL; ?>stats">Statistiques</a></li>
+                            <li><a href="<?php echo BASE_URL; ?>profile">Profil</a></li>
+                            <li><a href="<?php echo BASE_URL; ?>logout">Déconnexion</a></li>
                         <?php endif; ?>
                     <?php else: ?>
                         <li><a href="<?php echo BASE_URL; ?>register">Inscription</a></li>
