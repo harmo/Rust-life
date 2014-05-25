@@ -56,7 +56,7 @@ class Core {
         if(!empty($params)){
             foreach(explode(',', $params) as $param){
                 $param = explode('=', $param);
-                $this->params[$param[0]] = $param[1];
+                $this->params[$param[0]] = isset($param[1]) ? $param[1] : true;
             }
         }
         $url = $url[0];

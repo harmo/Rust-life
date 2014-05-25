@@ -114,6 +114,9 @@ class User extends Model {
 
     public function updateData($post, $by='user'){
         $errors = $this->checkData($post, false, true);
+        if(!empty($errors)){
+            return array('in_error' => true, 'errors' => $errors);
+        }
 
         $data = array(
             'identifiant'   => $this->escapeString($post['login']),
@@ -138,6 +141,53 @@ class User extends Model {
     public function remove(){
         if(!$this->delete('utilisateurs', array('id' => $this->id))){
             return array('in_error' => true, 'errors' => array('Suppression du membre impossible'));
+        }
+        return array('in_error' => false, 'success' => true);
+    }
+
+    public function loginLost($email){
+        $user = $this->selectOne('utilisateurs', '*', array('email' => $email));
+        if(!$user){
+            return array('in_error' => true, 'errors' => array('Adresse e-mail introuvable'));
+        }
+
+        $message = 'Vous avez effectué une demande de récupération d\'identifiant sur le site rust-life.fr.
+            <br>Votre adresse e-amil est liée à l\'identifiant : '.$user['identifiant'];
+        if(!mail($user['email'], '[Rust-life.fr] Récupération d\'identifiant', $message)){
+            return array('in_error' => true, 'errors' => array('Impossible d\'envoyer le mail'));
+        }
+        return array('in_error' => false, 'success' => $user['email']);
+    }
+
+    public function passwordLost($login){
+        $user = $this->selectOne('utilisateurs', '*', array('identifiant' => $login));
+        if(!$user){
+            return array('in_error' => true, 'errors' => array('Identifiant introuvable'));
+        }
+
+        $link = base64_encode('action=reset-password&id='.$user['id']);
+        $url = BASE_URL.'login/reset_password?'.$link;
+        $message = 'Vous avez effectué une demande de récupération de mot de passe sur le site rust-life.fr.
+            <br>Veuillez cliquer sur le lien suivant pour le réinitialiser : '.$url;
+        if(!mail($user['email'], '[Rust-life.fr] Récupération de mot de passe', $message)){
+            return array('in_error' => true, 'errors' => array('Impossible d\'envoyer le mail'));
+        }
+        return array('in_error' => false, 'success' => true);
+    }
+
+    public function resetPassword($post, $user_id){
+        $errors = $this->checkData($post, false, false, true);
+        if(!empty($errors)){
+            return array('in_error' => true, 'errors' => $errors);
+        }
+
+        $user = $this->selectOne('utilisateurs', '*', array('id' => (int)$user_id));
+        if(!$user){
+            return array('in_error' => true, 'errors' => array('Utilisateur introuvable'));
+        }
+        $data = array('motdepasse' => $this->escapeString($this->hashPassword($post['password'])));
+        if(!$this->update('utilisateurs', $data, array('id' => (int)$user_id))){
+            return array('in_error' => true, 'errors' => array('Mise à jour du mot de passe impossible'));
         }
         return array('in_error' => false, 'success' => true);
     }
