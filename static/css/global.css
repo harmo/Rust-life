@@ -5,3 +5,11 @@ body {
 .wrapper-content {
     min-height: 600px;
 }
+
+.lost-link a {
+    padding-left: 15px;
+}
+
+.action-link {
+    margin-right: 10px;
+}

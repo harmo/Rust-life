@@ -50,6 +50,16 @@ class Model {
         return $inserted_ids;
     }
 
+    public function selectOne($table, $fields, $where=null, $other=null){
+        $this->select($table, $fields, $where, $other=null);
+        return $this->single();
+    }
+
+    public function selectAll($table, $fields, $where=null, $other=null){
+        $this->select($table, $fields, $where, $other=null);
+        return $this->resultSet();
+    }
+
     private function select($table, $fields, $where=null, $other=null){
         $fields = !is_array($fields) ? array($fields) : $fields;
         $fields = implode(', ', $fields);
@@ -62,9 +72,10 @@ class Model {
                 if($i < sizeof($where)){
                     $where_query .= ' AND ';
                 }
+                $i ++;
             }
         }
-        $query = 'SELECT '.$fields.' FROM '.$table.$where.' '.$other;
+        $query = 'SELECT '.$fields.' FROM '.$table.$where_query.' '.$other;
         $this->query($query);
         if($where != null){
             foreach($where as $field => $value){
@@ -73,14 +84,68 @@ class Model {
         }
     }
 
-    public function selectOne($table, $fields, $where=null, $other=null){
-        $this->select($table, $fields, $where=null, $other=null);
-        return $this->single();
+    public function update($table, $values, $where){
+        try {
+            if(!is_array($values) || empty($values)){
+                throw new Exception('Empty values');
+            }
+            if(!is_array($where) || empty($where)){
+                throw new Exception('Empty where');
+            }
+
+            $set_values = array();
+            foreach($values as $field => $value){
+                array_push($set_values, $field.'='.$value);
+            }
+
+            $i = 1;
+            $where_query = ' WHERE ';
+            foreach($where as $field => $value){
+                $where_query .= $field.'=:'.strtolower($field);
+                if($i < sizeof($where)){
+                    $where_query .= ' AND ';
+                }
+                $i ++;
+            }
+
+            $query = 'UPDATE '.$table.' SET '.implode(',', $set_values).$where_query;
+            $this->query($query);
+            foreach($where as $field => $value){
+                $this->bind(':'.strtolower($field), $value);
+            }
+            return $this->execute();
+        }
+        catch(Exception $e){
+            exit($e->getMessage());
+        }
     }
 
-    public function selectAll($table, $fields, $where=null, $other=null){
-        $this->select($table, $fields, $where=null, $other=null);
-        return $this->resultSet();
+    public function delete($table, $where=array()){
+        try {
+            if(empty($where)){
+                throw new Exception('Unable to find WHERE clause');
+            }
+
+            $i = 1;
+            $where_query = ' WHERE ';
+            foreach($where as $field => $value){
+                $where_query .= $field.'=:'.strtolower($field);
+                if($i < sizeof($where)){
+                    $where_query .= ' AND ';
+                }
+                $i ++;
+            }
+
+            $query = 'DELETE FROM '.$table.$where_query;
+            $this->query($query);
+            foreach($where as $field => $value){
+                $this->bind(':'.strtolower($field), $value);
+            }
+            return $this->execute();
+        }
+        catch(Exception $e){
+            exit($e->getMessage());
+        }
     }
 
     private function query($query){
@@ -142,6 +207,10 @@ class Model {
 
     public function dump(){
         return $this->stmt->debugDumpParams();
+    }
+
+    public function escapeString($string){
+        return $this->dbh->quote($string);
     }
 
     /**

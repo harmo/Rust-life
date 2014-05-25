@@ -7,7 +7,7 @@
 <body>
     <?php include 'navbar.tpl.php' ?>
 
-    <div class="wrapper-content">
+    <div class="wrapper-content container">
         <?php echo $this->content(); ?>
     </div>
 

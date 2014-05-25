@@ -9,12 +9,14 @@ class Core {
     private $request_url;
     private $script_url;
     private $url_segments;
+    private $params;
 
     public function __construct($config){
         // Defaults
         $this->config = $config;
         $this->controller = $this->config['default_controller'];
         $this->action = 'index';
+        $this->params = array();
         $this->request_url = (isset($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : '';
         $this->script_url  = (isset($_SERVER['PHP_SELF'])) ? $_SERVER['PHP_SELF'] : '';
 
@@ -33,10 +35,10 @@ class Core {
         $this->mode = $obj->mode;
         if($this->mode == $this->config['base_template_admin']){
             $args = array_slice($this->url_segments, 1, 2);
-            $action = isset($args[1]) ? array(array($args[0] => $args[1])) : array();
+            $action = isset($args[1]) ? array(array($args[0] => $args[1]), $this->params) : array();
         }
         else {
-            $action = array_slice($this->url_segments, 2, 1);
+            $action = array(array_slice($this->url_segments, 2, 1), $this->params);
         }
         die(call_user_func_array(array($obj, $this->action), $action));
     }
@@ -49,7 +51,16 @@ class Core {
     }
 
     private function checkAndAssignSegments(){
-        $this->url_segments = explode('/', $this->url);
+        $url = explode('?', $this->url);
+        $params = isset($url[1]) ? str_replace('/', '', $url[1]) : array();
+        if(!empty($params)){
+            foreach(explode(',', $params) as $param){
+                $param = explode('=', $param);
+                $this->params[$param[0]] = $param[1];
+            }
+        }
+        $url = $url[0];
+        $this->url_segments = explode('/', $url);
         $this->controller = isset($this->url_segments[0]) && $this->url_segments[0] != '' ? $this->url_segments[0] : $this->controller;
         $this->action = isset($this->url_segments[1]) && $this->url_segments[1] != '' ? $this->url_segments[1] : $this->action;
     }

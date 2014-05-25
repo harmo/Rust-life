@@ -64,9 +64,9 @@ class Controller {
         return $helper;
     }
 
-    public function redirect($loc){
+    public function redirect($loc, $from=false){
         global $config;
-        header('Location: '. $config['base_url'] . $loc);
+        header('Location: '.$config['base_url'].$loc.($from ? '?from='.$from : ''));
     }
 
 }

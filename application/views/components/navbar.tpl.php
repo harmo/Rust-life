@@ -7,15 +7,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Rust Life</a>
+                <a class="navbar-brand" href="<?php echo BASE_URL; ?>">Rust Life</a>
             </div>
 
             <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="#">Inscription</a></li>
-                    <li><a href="#">Connexion</a></li>
-                    <li><a href="#">Rejoindre</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <?php if(isset($user) && $user): ?>
+                        <?php if($user->is_admin): ?>
+                            <li><a href="<?php echo BASE_URL; ?>admin">Administration</a></li>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <li><a href="<?php echo BASE_URL; ?>register">Inscription</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>login">Connexion</a></li>
+                        <li><a href="#">Rejoindre</a></li>
+                        <li><a href="#">Contact</a></li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
