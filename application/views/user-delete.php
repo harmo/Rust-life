@@ -1,5 +1,6 @@
 <?php if(isset($errors)): ?>
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <ul class="list-unstyled">
             <?php foreach($errors as $error): ?>
                 <li><?php echo $error; ?></li>
@@ -11,7 +12,8 @@
     <h3>Supprimer un utilisateur</h3>
 </div>
 <?php if(isset($success) && $success): ?>
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <h4>Membre supprimé avec succès</h4>
     </div>
 <?php else: ?>

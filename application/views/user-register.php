@@ -3,7 +3,8 @@
 </div>
 
 <?php if(isset($errors)): ?>
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <ul class="list-unstyled">
             <?php foreach($errors as $error): ?>
                 <li><?php echo $error; ?></li>
@@ -13,7 +14,8 @@
 <?php endif ?>
 
 <?php if(isset($success)): ?>
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <h4>Compte créé avec succès</h4>
         <p>
             Connectez-vous automatiquement en cliquant sur ce <a class="btn btn-success" href="<?php echo BASE_URL; ?>">bouton</a>

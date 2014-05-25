@@ -1,5 +1,6 @@
 <?php if(isset($user) && $user): ?>
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <h4>Vous êtes connecté</h4>
         <p>
             Bienvenue, <?php echo $user->login; ?>
@@ -13,7 +14,8 @@
                 <h3>Identifiant perdu <small>Un e-mail vous sera envoyé avec votre identifiant.</small></h3>
             </div>
             <?php if(isset($errors)): ?>
-                <div class="alert alert-danger">
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <ul class="list-unstyled">
                         <?php foreach($errors as $error): ?>
                             <li><?php echo $error; ?></li>
@@ -22,7 +24,8 @@
                 </div>
             <?php endif ?>
             <?php if(isset($success)): ?>
-                <div class="alert alert-success">
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <h3>Un email a été envoyé à l'adresse <?php echo $success; ?></h3>
                 </div>
             <?php else: ?>
@@ -46,7 +49,8 @@
                 <h3>Mot de passe perdu <small>Un lien vous sera envoyé par e-mail afin de le réinitialiser.</small></h3>
             </div>
             <?php if(isset($errors)): ?>
-                <div class="alert alert-danger">
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <ul class="list-unstyled">
                         <?php foreach($errors as $error): ?>
                             <li><?php echo $error; ?></li>
@@ -55,7 +59,8 @@
                 </div>
             <?php endif ?>
             <?php if(isset($success)): ?>
-                <div class="alert alert-success">
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <h3>Un email a été envoyé à l'adresse correspondante à cet identifiant</h3>
                 </div>
             <?php else: ?>
@@ -79,7 +84,8 @@
             <h3>Connexion <small>avec votre identifiant du serveur !</small></h3>
         </div>
         <?php if(isset($errors)): ?>
-            <div class="alert alert-danger">
+            <div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <ul class="list-unstyled">
                     <?php foreach($errors as $error): ?>
                         <li><?php echo $error; ?></li>

@@ -3,7 +3,8 @@
 </div>
 
 <?php if(isset($errors)): ?>
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <ul class="list-unstyled">
             <?php foreach($errors as $error): ?>
                 <li><?php echo $error; ?></li>
@@ -13,7 +14,8 @@
 <?php endif ?>
 
 <?php if(isset($success)): ?>
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <h4>Utilisateur créé avec succès !</h4>
         <p>
             Son mot de passe est le suivant, merci de lui faire parvenir : <pre><?php echo $success['user_password']; ?></pre>

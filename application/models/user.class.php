@@ -113,15 +113,17 @@ class User extends Model {
     }
 
     public function updateData($post, $by='user'){
-        $errors = $this->checkData($post, false, true);
+        $from_user = $by == 'user' ? true : false;
+        $errors = $this->checkData($post, false, true, $from_user);
         if(!empty($errors)){
             return array('in_error' => true, 'errors' => $errors);
         }
 
-        $data = array(
-            'identifiant'   => $this->escapeString($post['login']),
-            'email'         => $this->escapeString($post['email'])
-        );
+        $data = array();
+        if(isset($post['login'])){
+            $data['identifiant'] = $this->escapeString($post['login']);
+        }
+        $data['email'] = $this->escapeString($post['email']);
         if($post['password'] != ''){
             $data['motdepasse'] = $this->escapeString($this->hashPassword($post['password']));
         }
@@ -238,7 +240,7 @@ class User extends Model {
                     $errors['password'] = 'Mot de passe erroné';
                 }
             }
-            if($from_user){
+            if($from_user && $data['password'] != ''){
                 if($data['password_confirm'] == ''){
                     $errors['password_confirm'] = 'Mot de passe de confirmation vide';
                 }

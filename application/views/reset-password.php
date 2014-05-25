@@ -2,7 +2,8 @@
     <h3>Nouveau mot de passe</h3>
 </div>
 <?php if(isset($errors)): ?>
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <ul class="list-unstyled">
             <?php foreach($errors as $error): ?>
                 <li><?php echo $error; ?></li>
@@ -11,7 +12,8 @@
     </div>
 <?php endif ?>
 <?php if(isset($success)): ?>
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <h3>Mot de passe actualisé <small>Connectez-vous <a href="<?php echo BASE_URL; ?>login">ici</a></small></h3>
     </div>
 <?php else: ?>
