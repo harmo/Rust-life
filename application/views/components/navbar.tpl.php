@@ -41,10 +41,10 @@
                             <a href="<?php echo BASE_URL; ?>login">Connexion</a>
                         </li>
                         <li class="<?php echo $this->my_controller == 'join' ? 'active' : ''; ?>">
-                            <a href="#">Rejoindre</a>
+                            <a href="<?php echo BASE_URL; ?>join">Rejoindre</a>
                         </li>
                         <li class="<?php echo $this->my_controller == 'contact' ? 'active' : ''; ?>">
-                            <a href="#">Contact</a>
+                            <a href="<?php echo BASE_URL; ?>contact">Contact</a>
                         </li>
                     <?php endif; ?>
                 </ul>
