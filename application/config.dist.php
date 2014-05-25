@@ -1,6 +1,7 @@
 <?php
 $config['base_url'] = '';
-$config['project'] = 'Project'
+$config['project'] = 'Project';
+$config['admins'] = array();
 $config['default_controller'] = 'main';
 $config['error_controller'] = 'error';
 $config['default_template'] = 'base';
