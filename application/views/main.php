@@ -6,4 +6,6 @@
         </p>
         <a class="btn btn-lg btn-success" href="register">Inscription</a>
     </div>
+<?php else: ?>
+    Accueil du site
 <?php endif; ?>

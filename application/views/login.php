@@ -3,6 +3,7 @@
         <h4>Vous êtes connecté</h4>
         <p>
             Bienvenue, <?php echo $user->login; ?>
+            &nbsp;<a href="<?php echo BASE_URL; ?>" class="btn btn-success">Accueil du site</a>
         </p>
     </div>
 <?php else: ?>
