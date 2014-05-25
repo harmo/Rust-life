@@ -14,18 +14,38 @@
                 <ul class="nav navbar-nav">
                     <?php if(isset($user) && $user): ?>
                         <?php if($user->is_admin): ?>
-                            <li><a href="<?php echo BASE_URL; ?>admin">Administration</a></li>
-                            <li><a href="<?php echo BASE_URL; ?>clan">Clan</a></li>
-                            <li><a href="<?php echo BASE_URL; ?>infos">Informations</a></li>
-                            <li><a href="<?php echo BASE_URL; ?>stats">Statistiques</a></li>
-                            <li><a href="<?php echo BASE_URL; ?>profile">Profil</a></li>
-                            <li><a href="<?php echo BASE_URL; ?>logout">Déconnexion</a></li>
+                            <li>
+                                <a href="<?php echo BASE_URL; ?>admin">Administration</a>
+                            </li>
                         <?php endif; ?>
+                            <li class="<?php echo $this->my_controller == 'clan' ? 'active' : ''; ?>">
+                                <a href="<?php echo BASE_URL; ?>clan">Clan</a>
+                            </li>
+                            <li class="<?php echo $this->my_controller == 'infos' ? 'active' : ''; ?>">
+                                <a href="<?php echo BASE_URL; ?>infos">Informations</a>
+                            </li>
+                            <li class="<?php echo $this->my_controller == 'stats' ? 'active' : ''; ?>">
+                                <a href="<?php echo BASE_URL; ?>stats">Statistiques</a>
+                            </li>
+                            <li class="<?php echo $this->my_controller == 'profile' ? 'active' : ''; ?>">
+                                <a href="<?php echo BASE_URL; ?>profile">Profil</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo BASE_URL; ?>logout">Déconnexion</a>
+                            </li>
                     <?php else: ?>
-                        <li><a href="<?php echo BASE_URL; ?>register">Inscription</a></li>
-                        <li><a href="<?php echo BASE_URL; ?>login">Connexion</a></li>
-                        <li><a href="#">Rejoindre</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li class="<?php echo $this->my_controller == 'user-register' ? 'active' : ''; ?>">
+                            <a href="<?php echo BASE_URL; ?>register">Inscription</a>
+                        </li>
+                        <li class="<?php echo $this->my_controller == 'login' ? 'active' : ''; ?>">
+                            <a href="<?php echo BASE_URL; ?>login">Connexion</a>
+                        </li>
+                        <li class="<?php echo $this->my_controller == 'join' ? 'active' : ''; ?>">
+                            <a href="#">Rejoindre</a>
+                        </li>
+                        <li class="<?php echo $this->my_controller == 'contact' ? 'active' : ''; ?>">
+                            <a href="#">Contact</a>
+                        </li>
                     <?php endif; ?>
                 </ul>
             </div>
