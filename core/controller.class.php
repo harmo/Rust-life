@@ -43,9 +43,9 @@ class Controller {
         }
     }
 
-    public function loadModel($name){
+    public function loadModel($name, $config=null){
         require(APP_DIR .'models/'. strtolower($name) .'.class.php');
-        $model = new $name;
+        $model = new $name($config);
         return $model;
     }
 
