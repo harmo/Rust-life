@@ -4,7 +4,7 @@
         <h4>Vous êtes connecté</h4>
         <p>
             Bienvenue, <?php echo $user->login; ?>
-            &nbsp;<a href="<?php echo BASE_URL; ?>" class="btn btn-success">Accueil du site</a>
+            &nbsp;<a href="/<?php echo BASE_URL; ?>" class="btn btn-success">Accueil du site</a>
         </p>
     </div>
 <?php else: ?>
@@ -117,12 +117,12 @@
             </div>
             <div class="form-group lost-link">
                 <div class="col-sm-offset-2">
-                    <a href="<?php echo BASE_URL ?>login?lost=login">Récupérer son identifiant</a>
+                    <a href="/<?php echo BASE_URL ?>login?lost=login">Récupérer son identifiant</a>
                 </div>
             </div>
             <div class="form-group lost-link">
                 <div class="col-sm-offset-2">
-                    <a href="<?php echo BASE_URL ?>login?lost=password">Récupérer son mot de passe</a>
+                    <a href="/<?php echo BASE_URL ?>login?lost=password">Récupérer son mot de passe</a>
                 </div>
             </div>
             <div class="form-group">

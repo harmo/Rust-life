@@ -1,4 +1,4 @@
 <ul>
-    <li><a href="users/list">Liste des membres</a></li>
-    <li><a href="users/add">Ajouter un membre</a></li>
+    <li><a href="/<?php echo BASE_URL; ?>admin/users/list">Liste des membres</a></li>
+    <li><a href="/<?php echo BASE_URL; ?>admin/users/add">Ajouter un membre</a></li>
 </ul>

@@ -171,6 +171,7 @@ class User extends Model {
         $url = BASE_URL.'login/reset_password?'.$link;
         $message = 'Vous avez effectué une demande de récupération de mot de passe sur le site rust-life.fr.
             <br>Veuillez cliquer sur le lien suivant pour le réinitialiser : '.$url;
+        var_dump($message);
         if(!mail($user['email'], '[Rust-life.fr] Récupération de mot de passe', $message)){
             return array('in_error' => true, 'errors' => array('Impossible d\'envoyer le mail'));
         }

@@ -18,7 +18,7 @@
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <h4>Compte créé avec succès</h4>
         <p>
-            Connectez-vous automatiquement en cliquant sur ce <a class="btn btn-success" href="<?php echo BASE_URL; ?>">bouton</a>
+            Connectez-vous automatiquement en cliquant sur ce <a class="btn btn-success" href="/<?php echo BASE_URL; ?>">bouton</a>
         </p>
     </div>
 <?php else: ?>

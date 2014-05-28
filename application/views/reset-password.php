@@ -14,7 +14,7 @@
 <?php if(isset($success)): ?>
     <div class="alert alert-success alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <h3>Mot de passe actualisé <small>Connectez-vous <a href="<?php echo BASE_URL; ?>login">ici</a></small></h3>
+        <h3>Mot de passe actualisé <small>Connectez-vous <a href="/<?php echo BASE_URL; ?>login">ici</a></small></h3>
     </div>
 <?php else: ?>
     <form class="form-horizontal" role="form" method="post">
