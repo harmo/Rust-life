@@ -14,4 +14,3 @@ $config['autoload'] = array(
     'plugins' => array(),
     'helpers' => array('session', 'url', 'staticFiles')
 );
-$test = '';
