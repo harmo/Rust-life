@@ -23,6 +23,13 @@ class View {
         $this->pageVars[$var] = $val;
     }
 
+    public function get($var){
+        if(isset($this->pageVars[$var])){
+            return $this->pageVars[$var];
+        }
+        return false;
+    }
+
     public function render(){
         global $config;
         extract($this->pageVars);
@@ -36,19 +43,19 @@ class View {
         echo ob_get_clean();
     }
 
-    private function addCustomFile($type, $file){
+    private function addCustomFile($type, $file, $vendor){
         try {
             if(!isset($this->pageVars['static'])){
                 throw new Exception('You have to set static var before add custom '.$type.' files in your controller '.$this->my_controller.'.class.php');
             }
-            $src = $this->pageVars['static']->{$type}($file);
+            $src = $this->pageVars['static']->{$type}($file, $vendor);
             $var_name = 'extra_'.$type;
             $tab = sizeof($this->{$var_name}) == 0 ? '' : '    ';
             if($type == 'css'){
-                $html = '<link rel="stylesheet" type="text/css" href="'.$src.'">';
+                $html = '<link rel="stylesheet" type="text/css" href="/'.BASE_URL.$src.'">';
             }
             else {
-                $html = '<script type="text/javascript" src="'.$src.'"></script>';
+                $html = '<script type="text/javascript" src="/'.BASE_URL.$src.'"></script>';
             }
             array_push($this->{$var_name}, $tab.$html);
             $this->set($var_name, implode("\n", $this->{$var_name}));
@@ -58,12 +65,12 @@ class View {
         }
     }
 
-    public function addCss($css){
-        $this->addCustomFile('css', $css);
+    public function addCss($css, $type='css'){
+        $this->addCustomFile('css', $css, $type);
     }
 
-    public function addJs($js){
-        $this->addCustomFile('js', $js);
+    public function addJs($js, $type='js'){
+        $this->addCustomFile('js', $js, $type);
     }
 
     public function content(){

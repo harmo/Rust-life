@@ -13,3 +13,7 @@ body {
 .action-link {
     margin-right: 10px;
 }
+
+.select2-input {
+    min-width: 262px !important;
+}

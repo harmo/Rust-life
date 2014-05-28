@@ -6,8 +6,11 @@ class Error extends Controller {
     }
 
     function error404(){
-        echo '<h1>404 Error</h1>';
-        echo '<p>Cette page n\'existe pas.</p>';
+        $template = $this->loadView('error404');
+        $template->set('static', $this->staticFiles);
+        $template->set('title', 'ERREUR 404');
+        $template->set('user', $this->session->get('user'));
+        $template->render();
     }
 
 }

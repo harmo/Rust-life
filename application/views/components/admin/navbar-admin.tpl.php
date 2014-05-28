@@ -15,6 +15,15 @@
                     <li class="<?php echo $this->my_controller == 'users' ? 'active' : ''; ?>">
                         <a href="/<?php echo BASE_URL; ?>admin/users">Membres</a>
                     </li>
+                    <li class="<?php echo $this->my_controller == 'grades' ? 'active' : ''; ?>">
+                        <a href="/<?php echo BASE_URL; ?>admin/grades">Rangs</a>
+                    </li>
+                    <li class="<?php echo $this->my_controller == 'permissions' ? 'active' : ''; ?>">
+                        <a href="/<?php echo BASE_URL; ?>admin/permissions">Permissions</a>
+                    </li>
+                    <li class="<?php echo $this->my_controller == 'clans' ? 'active' : ''; ?>">
+                        <a href="/<?php echo BASE_URL; ?>admin/clans">Clans</a>
+                    </li>
                 </ul>
             </div>
         </div>
