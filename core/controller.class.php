@@ -1,9 +1,12 @@
 <?php
 class Controller {
 
+    public $config;
     public $mode;
 
     function __construct($mode = 'user'){
+        global $config;
+        $this->config = $config;
         $this->mode = $mode;
         $this->autoload();
     }
@@ -13,9 +16,8 @@ class Controller {
      * @return None
      */
     private function autoload(){
-        global $config;
         try {
-            foreach($config['autoload'] as $type => $payload){
+            foreach($this->config['autoload'] as $type => $payload){
                 if(!is_array($payload)){
                     throw new Exception('payload is not an array');
                 }
@@ -45,7 +47,7 @@ class Controller {
 
     public function loadModel($name, $config=null){
         require(APP_DIR .'models/'. strtolower($name) .'.class.php');
-        $model = new $name($config);
+        $model = new $name($this->config);
         return $model;
     }
 
@@ -65,8 +67,7 @@ class Controller {
     }
 
     public function redirect($loc, $from=false){
-        global $config;
-        header('Location: '.$config['base_url'].$loc.($from ? '?from='.$from : ''));
+        header('Location: '.$this->config['base_url'].$loc.($from ? '?from='.$from : ''));
     }
 
 }

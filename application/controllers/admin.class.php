@@ -12,7 +12,7 @@ class Admin extends Controller {
         if(!$user_session){
             $this->redirect('login', 'admin');
         }
-        if(!$user_session->is_admin){
+        else if(!$user_session->is_admin){
             $this->redirect('');
         }
 
