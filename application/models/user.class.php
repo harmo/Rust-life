@@ -237,13 +237,16 @@ class User extends Model {
             }
         }
 
-        if(isset($data['password']) && $data['password'] != ''){
+        if(isset($data['password'])){
             if(!$updating && $data['password'] == ''){
                 $errors['password'] = 'Mot de passe vide';
             }
             elseif(!$from_user && !isset($errors['login'])){
                 $user = $this->selectOne('utilisateurs', 'motdepasse', array('identifiant' => $data['login']));
-                if($user && !$this->checkPassword($data['password'], $user['motdepasse'])){
+                if(!$user){
+                    $errors['login'] = 'Utilisateur introuvable';
+                }
+                elseif($user && !$this->checkPassword($data['password'], $user['motdepasse'])){
                     $errors['password'] = 'Mot de passe erroné';
                 }
             }
