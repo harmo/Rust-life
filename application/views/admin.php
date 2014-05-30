@@ -1,1 +1,0 @@
-<h3>Tableau de bord administrateur</h3>

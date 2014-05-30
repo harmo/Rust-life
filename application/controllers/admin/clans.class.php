@@ -1,5 +1,5 @@
 <?php
-class Users extends Controller {
+class Clans extends Controller {
 
     private $template;
     function __construct(){
@@ -15,22 +15,28 @@ class Users extends Controller {
             $this->redirect('');
         }
 
-        $user = $this->loadModel('user');
         $clan = $this->loadModel('clan');
 
         switch ($this->action){
             case 'list':
-                $this->template = $this->loadView('admin/users/list');
-                $this->template->set('title', 'Liste des membres');
-                $this->template->set('users', $user->getAll());
+                $this->template = $this->loadView('admin/clans/list');
+                $this->template->set('title', 'Liste des clans');
                 $this->template->set('clans', $clan->getAll());
                 break;
 
             case 'add':
-                $this->template = $this->loadView('admin/users/add');
-                $this->template->set('title', 'Ajouter un membre');
-                if(isset($_POST['add_user'])){
-                    $create = $user->create($_POST);
+                $this->template = $this->loadView('admin/clans/add');
+                $this->template->set('static', $this->staticFiles);
+                $this->template->addCss('select2-3.4.1/select2', 'vendor');
+                $this->template->addJs('select2-3.4.1/select2.min', 'vendor');
+                $this->template->addJs('clans');
+                $this->template->set('title', 'Ajouter un clan');
+
+                $user = $this->loadModel('user');
+                $this->template->set('users', $user->getAll());
+
+                if(isset($_POST['add_clan'])){
+                    $create = $clan->create($_POST);
                     if(isset($create['in_error']) && $create['in_error']){
                         $this->template->set('errors', $create['errors']);
                     }
@@ -38,16 +44,24 @@ class Users extends Controller {
                         $this->template->set('success', $create['success']);
                     }
                 }
+
                 break;
 
             case 'update':
-                $this->template = $this->loadView('admin/users/update');
-                $this->template->set('clans', $clan->getAll());
+                $this->template = $this->loadView('admin/clans/update');
+                $this->template->set('static', $this->staticFiles);
+                $this->template->addCss('select2-3.4.1/select2', 'vendor');
+                $this->template->addJs('select2-3.4.1/select2.min', 'vendor');
+                $this->template->addJs('clans');
+                $this->template->set('title', 'Éditer un clan');
+
                 if(isset($_GET['id'])){
-                    $this->template->set('user_to_update', $user->get($_GET['id']));
+                    $user = $this->loadModel('user');
+                    $this->template->set('users', $user->getAll());
+                    $this->template->set('clan_to_update', $clan->get($_GET['id']));
                 }
-                if(isset($_POST['update_user'])){
-                    $update = $user->updateData($_POST, 'admin');
+                if(isset($_POST['update_clan'])){
+                    $update = $clan->updateData($_POST);
                     if(isset($update['in_error']) && $update['in_error']){
                         $this->template->set('errors', $update['errors']);
                     }
@@ -60,14 +74,14 @@ class Users extends Controller {
             case 'delete':
                 try {
                     if(!isset($_GET['id'])){
-                        throw new Exception('Unable to find user id in GET parameters');
+                        throw new Exception('Unable to find clan id in GET parameters');
                     }
                     else {
-                        $this->template = $this->loadView('admin/users/delete');
-                        $this->template->set('title', 'Supprimer un membre');
-                        $this->template->set('user', $user->get($_GET['id']));
+                        $this->template = $this->loadView('admin/clans/delete');
+                        $this->template->set('title', 'Supprimer un clan');
+                        $this->template->set('clan', $clan->get($_GET['id']));
                         if(isset($_POST['confirm'])){
-                            $delete = $user->remove($clan);
+                            $delete = $clan->remove();
                             if(isset($delete['in_error']) && $delete['in_error']){
                                 $this->template->set('errors', $delete['errors']);
                             }
@@ -76,7 +90,7 @@ class Users extends Controller {
                             }
                         }
                         elseif(isset($_POST['cancel'])){
-                            $this->redirect('admin/users/list');
+                            $this->redirect('admin/clans/list');
                         }
                     }
                 }
@@ -86,11 +100,12 @@ class Users extends Controller {
                 break;
 
             default:
-                $this->template = $this->loadView('admin/users/main');
-                $this->template->set('title', 'Membres');
+                $this->template = $this->loadView('admin/clans/main');
+                $this->template->set('title', 'Rangs');
                 break;
         }
 
+        $this->template->set('modes', $clan->available_modes);
         $this->template->set('static', $this->staticFiles);
         $this->template->render();
     }

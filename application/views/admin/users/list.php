@@ -27,7 +27,7 @@
                     <td><?php echo $user->grade; ?></td>
                     <td><?php echo $user->points; ?></td>
                     <td><?php echo $user->monney; ?></td>
-                    <td><?php echo $user->clan; ?></td>
+                    <td><?php echo isset($clans[$user->clan]) ? $clans[$user->clan]->name : '-'; ?></td>
                     <td><?php echo $user->datetime; ?></td>
                     <td><?php echo $user->ip; ?></td>
                     <td>

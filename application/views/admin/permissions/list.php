@@ -4,7 +4,7 @@
 
 <div class="lead">
     <?php if(empty($permissions)): ?>
-        Aucune permission enregistré.
+        Aucune permission enregistrée.
     <?php else: ?>
         <table class="table table-striped">
             <thead>

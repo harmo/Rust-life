@@ -140,7 +140,13 @@ class User extends Model {
         return array('in_error' => false, 'success' => true);
     }
 
-    public function remove(){
+    public function remove($clan=false){
+        if($clan && $this->clan != '' && $this->clan != null){
+            $loaded_clan = $clan->get($this->clan);
+            if($loaded_clan->owner['id'] == $this->id){
+                return array('in_error' => true, 'errors' => array('Ce membre est chef du clan <strong>'.$loaded_clan->name.'</strong>, suppression impossible'));
+            }
+        }
         if(!$this->delete('utilisateurs', array('id' => $this->id))){
             return array('in_error' => true, 'errors' => array('Suppression du membre impossible'));
         }
@@ -231,7 +237,7 @@ class User extends Model {
             }
         }
 
-        if(isset($data['password'])){
+        if(isset($data['password']) && $data['password'] != ''){
             if(!$updating && $data['password'] == ''){
                 $errors['password'] = 'Mot de passe vide';
             }

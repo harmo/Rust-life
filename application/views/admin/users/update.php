@@ -60,7 +60,12 @@
         <div class="form-group <?php echo (isset($errors) && isset($errors['clan']) ? 'has-error' : '') ?>">
             <label for="clan" class="col-sm-4 control-label">Clan</label>
             <div class="col-sm-3">
-                <input type="text" name="clan" class="form-control" id="clan" value="<?php echo $user_to_update->clan; ?>">
+                <select name="clan" id="clan" class="form-control clan-select">
+                    <option value="">-- Choisir --</option>
+                    <?php foreach($clans as $id => $clan): ?>
+                        <?php echo '<option value="'.$id.'"'.($id == $user_to_update->clan  ? 'selected="selected"' : '').'>'.$clan->name.'</option>'; ?>
+                    <?php endforeach; ?>
+                </select>
             </div>
         </div>
         <div class="form-group">

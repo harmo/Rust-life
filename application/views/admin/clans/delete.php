@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h3>Supprimer un utilisateur</h3>
+    <h3>Supprimer un clan</h3>
 </div>
 <?php if(isset($errors)): ?>
     <div class="alert alert-danger alert-dismissable">
@@ -14,13 +14,13 @@
 <?php if(isset($success) && $success): ?>
     <div class="alert alert-success alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <h4>Membre supprimé avec succès</h4>
+        <h4>Clan supprimé avec succès</h4>
     </div>
 <?php else: ?>
     <form role="form" method="post">
-        <input type="hidden" name="user_id" value="<?php echo $user->id; ?>">
+        <input type="hidden" name="grade_id" value="<?php echo $clan->id; ?>">
         <div class="form-group">
-            Êtes-vous sûr de vouloir supprimer l'utilisateur <strong><?php echo $user->login; ?></strong> ?
+            Êtes-vous sûr de vouloir supprimer le clan <strong><?php echo $clan->name; ?></strong> ?
         </div>
         <div class="form-group">
             <button type="submit" name="confirm" class="btn btn-success">Confirmer</button>
