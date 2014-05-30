@@ -3,11 +3,31 @@ class Controller {
 
     public $config;
     public $mode;
+    public $action;
 
-    function __construct($mode = 'user'){
-        global $config;
-        $this->config = $config;
-        $this->mode = $mode;
+    function __construct($core=null){
+        if($core != null && is_object($core)){
+            $this->config = $core->config;
+            $this->mode = $core->mode;
+        }
+        else {
+            global $config;
+            $this->config = $config;
+            if($core == 'admin'){
+                $this->mode = $core;
+            }
+        }
+
+        if(isset($_GET['params'])){
+            $params = explode('/', $_GET['params']);
+            if($this->mode == $this->config['admin_mode'] && isset($params[1])){
+                $this->action = $params[1];
+            }
+            else {
+                $this->action = $params[0];
+            }
+        }
+
         $this->autoload();
     }
 
@@ -67,7 +87,6 @@ class Controller {
     }
 
     public function redirect($loc, $from=false){
-        header('Location: '.$this->config['base_url'].$loc.($from ? '?from='.$from : ''));
+        header('Location: /'.$this->config['base_url'].$loc.($from ? '?from='.$from : ''));
     }
-
 }

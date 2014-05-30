@@ -7,7 +7,7 @@ class Main extends Controller {
 
     function index(){
         global $config;
-        $template = $this->loadView('main');
+        $template = $this->loadView('front/main');
         $template->set('static', $this->staticFiles);
         $template->set('title', $config['project']);
         $template->set('user', $this->session->get('user'));

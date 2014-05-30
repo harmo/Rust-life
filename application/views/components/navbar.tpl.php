@@ -18,32 +18,32 @@
                                 <a href="/<?php echo BASE_URL; ?>admin">Administration</a>
                             </li>
                         <?php endif; ?>
-                            <li class="<?php echo $this->my_controller == 'clan' ? 'active' : ''; ?>">
+                            <li class="<?php echo $this->template == 'clan' ? 'active' : ''; ?>">
                                 <a href="/<?php echo BASE_URL; ?>clan">Clan</a>
                             </li>
-                            <li class="<?php echo $this->my_controller == 'infos' ? 'active' : ''; ?>">
+                            <li class="<?php echo $this->template == 'infos' ? 'active' : ''; ?>">
                                 <a href="/<?php echo BASE_URL; ?>infos">Informations</a>
                             </li>
-                            <li class="<?php echo $this->my_controller == 'stats' ? 'active' : ''; ?>">
+                            <li class="<?php echo $this->template == 'stats' ? 'active' : ''; ?>">
                                 <a href="/<?php echo BASE_URL; ?>stats">Statistiques</a>
                             </li>
-                            <li class="<?php echo $this->my_controller == 'profile' ? 'active' : ''; ?>">
+                            <li class="<?php echo $this->template == 'profile' ? 'active' : ''; ?>">
                                 <a href="/<?php echo BASE_URL; ?>profile">Profil</a>
                             </li>
                             <li>
                                 <a href="/<?php echo BASE_URL; ?>logout">Déconnexion</a>
                             </li>
                     <?php else: ?>
-                        <li class="<?php echo $this->my_controller == 'user-register' ? 'active' : ''; ?>">
+                        <li class="<?php echo $this->template == 'user-register' ? 'active' : ''; ?>">
                             <a href="/<?php echo BASE_URL; ?>register">Inscription</a>
                         </li>
-                        <li class="<?php echo $this->my_controller == 'login' ? 'active' : ''; ?>">
+                        <li class="<?php echo $this->template == 'login' ? 'active' : ''; ?>">
                             <a href="/<?php echo BASE_URL; ?>login">Connexion</a>
                         </li>
-                        <li class="<?php echo $this->my_controller == 'join' ? 'active' : ''; ?>">
+                        <li class="<?php echo $this->template == 'join' ? 'active' : ''; ?>">
                             <a href="/<?php echo BASE_URL; ?>join">Rejoindre</a>
                         </li>
-                        <li class="<?php echo $this->my_controller == 'contact' ? 'active' : ''; ?>">
+                        <li class="<?php echo $this->template == 'contact' ? 'active' : ''; ?>">
                             <a href="/<?php echo BASE_URL; ?>contact">Contact</a>
                         </li>
                     <?php endif; ?>

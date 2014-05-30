@@ -5,12 +5,14 @@ class Login extends Controller {
         parent::__construct();
     }
 
-    function index($action, $params){
-        $from = isset($params['from']) ? $params['from'] : false;
-        $template = $this->loadView('login');
+    function index($action=false, $params=false){
+        $from = isset($_GET['from']) ? $_GET['from'] : false;
+        $template = $this->loadView('front/user/login');
         $template->set('static', $this->staticFiles);
         $template->set('title', 'Connexion');
         $template->set('user', $this->session->get('user'));
+        $template->set('action', $action);
+        $template->set('params', $params);
 
         $user = $this->loadModel('user');
         if(isset($_POST['submit_login'])){
@@ -46,53 +48,6 @@ class Login extends Controller {
         }
 
         $template->render();
-    }
-
-    function reset_password($action, $params=null){
-        try {
-            if($params == null){
-                if(DEV){
-                    throw new Exception('No parameters found');
-                }
-                $this->redirect('');
-            }
-            $params = explode('&', base64_decode(key($params)));
-            $action = explode('=', $params[0]);
-            if($action[0] != 'action' || $action[1] != 'reset-password'){
-                if(DEV){
-                    throw new Exception('Bad action');
-                }
-                $this->redirect('');
-            }
-            $params = explode('=', $params[1]);
-            if($params[0] != 'id' || (int)$params[1] == 0){
-                if(DEV){
-                    throw new Exception('Bad parameter');
-                }
-                $this->redirect('');
-            }
-
-            $user = $this->loadModel('user');
-
-            $template = $this->loadView('reset-password');
-            $template->set('static', $this->staticFiles);
-            $template->set('title', 'Nouveau mot de passe');
-
-            if(isset($_POST['send_reset'])){
-                $reset_password = $user->resetPassword($_POST, $params[1]);
-                if(!$reset_password || isset($reset_password['in_error']) && $reset_password['in_error']){
-                    $template->set('errors', $reset_password['errors']);
-                }
-                else {
-                    $template->set('success', $reset_password['success']);
-                }
-            }
-
-            $template->render();
-        }
-        catch(Exception $e){
-            exit($e->getMessage());
-        }
     }
 
 }

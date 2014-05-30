@@ -6,7 +6,7 @@ class Infos extends Controller {
     }
 
     function index(){
-        $template = $this->loadView('infos');
+        $template = $this->loadView('front/infos');
         $template->set('static', $this->staticFiles);
         $template->set('title', 'Informations');
         $template->set('user', $this->session->get('user'));
