@@ -6,7 +6,7 @@ class Profile extends Controller {
     }
 
     function index(){
-        $template = $this->loadView('profile');
+        $template = $this->loadView('front/user/profile');
         $template->set('static', $this->staticFiles);
         $template->set('title', 'Mon profil');
         $current_user = $this->session->get('user');

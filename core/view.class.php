@@ -1,7 +1,6 @@
 <?php
 class View {
 
-    private $my_controller;
     private $mode;
     private $pageVars;
     private $template;
@@ -9,7 +8,6 @@ class View {
     private $extra_js = array();
 
     public function __construct($template, $mode){
-        $this->my_controller = $template;
         $this->mode = $mode;
         $this->template = APP_DIR .'views/'. $template .'.php';
         $this->pageVars = array(
@@ -34,7 +32,7 @@ class View {
         global $config;
         extract($this->pageVars);
         ob_start();
-        if($this->mode == $config['base_template_admin']){
+        if($this->mode == $config['admin_mode']){
             require(APP_DIR .'views/components/admin/'.$config['base_template_admin'].'.tpl.php');
         }
         else {
@@ -46,7 +44,7 @@ class View {
     private function addCustomFile($type, $file, $vendor){
         try {
             if(!isset($this->pageVars['static'])){
-                throw new Exception('You have to set static var before add custom '.$type.' files in your controller '.$this->my_controller.'.class.php');
+                throw new Exception('You have to set static var before add custom '.$type.' files in your controller '.$this->template.'.class.php');
             }
             $src = $this->pageVars['static']->{$type}($file, $vendor);
             $var_name = 'extra_'.$type;

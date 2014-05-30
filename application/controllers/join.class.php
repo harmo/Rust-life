@@ -7,7 +7,7 @@ class Join extends Controller {
 
     function index(){
         global $config;
-        $template = $this->loadView('join');
+        $template = $this->loadView('front/join');
         $template->set('static', $this->staticFiles);
         $template->set('title', 'Nous rejoindre');
         $template->render();

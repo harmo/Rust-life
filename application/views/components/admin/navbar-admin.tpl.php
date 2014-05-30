@@ -12,16 +12,16 @@
 
             <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="<?php echo $this->my_controller == 'users' ? 'active' : ''; ?>">
+                    <li class="<?php echo $this->template == 'users' ? 'active' : ''; ?>">
                         <a href="/<?php echo BASE_URL; ?>admin/users">Membres</a>
                     </li>
-                    <li class="<?php echo $this->my_controller == 'grades' ? 'active' : ''; ?>">
+                    <li class="<?php echo $this->template == 'grades' ? 'active' : ''; ?>">
                         <a href="/<?php echo BASE_URL; ?>admin/grades">Rangs</a>
                     </li>
-                    <li class="<?php echo $this->my_controller == 'permissions' ? 'active' : ''; ?>">
+                    <li class="<?php echo $this->template == 'permissions' ? 'active' : ''; ?>">
                         <a href="/<?php echo BASE_URL; ?>admin/permissions">Permissions</a>
                     </li>
-                    <li class="<?php echo $this->my_controller == 'clans' ? 'active' : ''; ?>">
+                    <li class="<?php echo $this->template == 'clans' ? 'active' : ''; ?>">
                         <a href="/<?php echo BASE_URL; ?>admin/clans">Clans</a>
                     </li>
                 </ul>
