@@ -1,6 +1,8 @@
-<div class="page-header">
-    <h2>Liste des membres</h2>
-</div>
+<ol class="breadcrumb">
+    <li><a href="/<?php echo BASE_URL ?>admin">Tableau de bord</a></li>
+    <li><a href="/<?php echo BASE_URL ?>admin/users">Administration des membres</a></li>
+    <li class="active">Liste des membres</li>
+</ol>
 
 <?php if(empty($users)): ?>
     Aucun membre enregistré.

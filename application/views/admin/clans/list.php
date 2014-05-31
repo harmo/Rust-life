@@ -1,6 +1,8 @@
-<div class="page-header">
-    <h2>Liste des clans</h2>
-</div>
+<ol class="breadcrumb">
+    <li><a href="/<?php echo BASE_URL ?>admin">Tableau de bord</a></li>
+    <li><a href="/<?php echo BASE_URL ?>admin/users">Administration des clans</a></li>
+    <li class="active">Liste des clans</li>
+</ol>
 
 <div class="lead">
     <?php if(empty($clans)): ?>

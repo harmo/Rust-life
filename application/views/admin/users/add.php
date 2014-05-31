@@ -1,6 +1,8 @@
-<div class="page-header">
-    <h2>Ajouter un membre</h2>
-</div>
+<ol class="breadcrumb">
+    <li><a href="/<?php echo BASE_URL ?>admin">Tableau de bord</a></li>
+    <li><a href="/<?php echo BASE_URL ?>admin/users">Administration des membres</a></li>
+    <li class="active">Ajouter un membre</li>
+</ol>
 
 <?php if(isset($errors)): ?>
     <div class="alert alert-danger alert-dismissable">

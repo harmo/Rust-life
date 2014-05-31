@@ -11,6 +11,10 @@ body {
     color: #CE422B !important;
 }
 
+.breadcrumb li.active {
+    color: #CE422B !important;
+}
+
 .wrapper-content {
     min-height: 600px;
 }

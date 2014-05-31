@@ -1,6 +1,9 @@
-<div class="page-header">
-    <h2>Supprimer une permission</h2>
-</div>
+<ol class="breadcrumb">
+    <li><a href="/<?php echo BASE_URL ?>admin">Tableau de bord</a></li>
+    <li><a href="/<?php echo BASE_URL ?>admin/users">Administration des permissions</a></li>
+    <li class="active">Supprimer une permission</li>
+</ol>
+
 <?php if(isset($errors)): ?>
     <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
