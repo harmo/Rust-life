@@ -155,6 +155,7 @@ class User extends Model {
 
     public function loginLost($email){
         $user = $this->selectOne('utilisateurs', '*', array('email' => $email));
+
         if(!$user){
             return array('in_error' => true, 'errors' => array('Adresse e-mail introuvable'));
         }
@@ -174,10 +175,9 @@ class User extends Model {
         }
 
         $link = base64_encode('action=reset-password&id='.$user['id']);
-        $url = BASE_URL.'login/reset_password?'.$link;
+        $url = BASE_URL.'reset_password/'.$link;
         $message = 'Vous avez effectué une demande de récupération de mot de passe sur le site rust-life.fr.
             <br>Veuillez cliquer sur le lien suivant pour le réinitialiser : http://rust-life.fr/'.$url;
-        var_dump($message);
         if(!mail($user['email'], '[Rust-life.fr] Récupération de mot de passe', $message)){
             return array('in_error' => true, 'errors' => array('Impossible d\'envoyer le mail'));
         }
