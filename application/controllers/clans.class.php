@@ -1,5 +1,5 @@
 <?php
-class Infos extends Controller {
+class Clans extends Controller {
 
     function __construct(){
         parent::__construct();
@@ -11,10 +11,14 @@ class Infos extends Controller {
             $this->redirect('login');
         }
 
-        $template = $this->loadView('front/infos');
+        $template = $this->loadView('front/clans');
+        $template->set('user', $user_session);
         $template->set('static', $this->staticFiles);
-        $template->set('title', 'Informations');
-        $template->set('user', $this->session->get('user'));
+        $template->set('title', 'Clans');
+
+        $clan = $this->loadModel('clan');
+        $template->set('clans', $clan->getAll());
+
         $template->render();
     }
 

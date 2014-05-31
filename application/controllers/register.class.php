@@ -6,7 +6,6 @@ class Register extends Controller {
     }
 
     function index(){
-        global $config;
         $template = $this->loadView('front/user/register');
         $template->set('static', $this->staticFiles);
         $template->set('title', 'Créer un compte');

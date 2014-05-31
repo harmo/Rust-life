@@ -13,6 +13,7 @@ class Clan extends Model {
         2 => 'Public',
         3 => 'Sur demande'
     );
+    public static $PUBLIC = 2;
 
     public function get($id){
         return $this->loadClan($this->selectOne('clan', '*', array('id' => (int)$id)));

@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h3>Supprimer un clan</h3>
+    <h2>Supprimer un clan</h2>
 </div>
 <?php if(isset($errors)): ?>
     <div class="alert alert-danger alert-dismissable">

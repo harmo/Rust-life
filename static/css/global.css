@@ -2,6 +2,15 @@ body {
     padding-top: 70px;
 }
 
+.logo {
+    color: #CE422B !important;
+    font-size: 30px;
+}
+
+.page-header {
+    color: #CE422B !important;
+}
+
 .wrapper-content {
     min-height: 600px;
 }

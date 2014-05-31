@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h3>Liste des membres</h3>
+    <h2>Liste des membres</h2>
 </div>
 
 <?php if(empty($users)): ?>

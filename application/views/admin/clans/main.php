@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h3>Administration des clans</h3>
+    <h2>Administration des clans</h2>
 </div>
 
 <div class="lead">

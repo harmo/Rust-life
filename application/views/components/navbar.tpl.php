@@ -7,7 +7,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/<?php echo BASE_URL; ?>">Rust Life</a>
+                <a class="navbar-brand logo" href="/<?php echo BASE_URL; ?>">Rust Life</a>
             </div>
 
             <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
@@ -19,7 +19,7 @@
                             </li>
                         <?php endif; ?>
                             <li class="<?php echo $this->template == 'clan' ? 'active' : ''; ?>">
-                                <a href="/<?php echo BASE_URL; ?>clan">Clan</a>
+                                <a href="/<?php echo BASE_URL; ?>clans">Clans</a>
                             </li>
                             <li class="<?php echo $this->template == 'infos' ? 'active' : ''; ?>">
                                 <a href="/<?php echo BASE_URL; ?>infos">Informations</a>

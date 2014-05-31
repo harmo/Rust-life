@@ -16,3 +16,4 @@ $config['autoload'] = array(
     'plugins' => array(),
     'helpers' => array('session', 'url', 'staticFiles')
 );
+$config['clan_cost'] = 1000;

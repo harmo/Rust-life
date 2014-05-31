@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h3>Liste des rangs</h3>
+    <h2>Liste des rangs</h2>
 </div>
 
 <div class="lead">
