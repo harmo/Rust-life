@@ -7,11 +7,13 @@ class Clans extends Controller {
     }
 
     function index(){
-        $user_session = $this->session->get('user');
-        if(!$user_session){
+        $user_id = $this->session->get('user');
+        if(!$user_id){
             $this->redirect('login', 'admin');
         }
-        else if(!$user_session->is_admin){
+        $user = $this->loadModel('user');
+        $user_session = $user->get($user_id);
+        if(!$user_session->is_admin){
             $this->redirect('');
         }
 
@@ -32,7 +34,6 @@ class Clans extends Controller {
                 $this->template->addJs('clans');
                 $this->template->set('title', 'Ajouter un clan');
 
-                $user = $this->loadModel('user');
                 $this->template->set('users', $user->getAll());
 
                 if(isset($_POST['add_clan'])){
@@ -56,7 +57,6 @@ class Clans extends Controller {
                 $this->template->set('title', 'Éditer un clan');
 
                 if(isset($_GET['id'])){
-                    $user = $this->loadModel('user');
                     $this->template->set('users', $user->getAll());
                     $this->template->set('clan_to_update', $clan->get($_GET['id']));
                 }

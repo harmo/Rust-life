@@ -21,8 +21,8 @@ class Login extends Controller {
                 $template->set('errors', $login['errors']);
             }
             elseif(isset($login['success'])){
-                $this->session->set('user', $login['success']['user']);
-                $template->set('user', $login['success']['user']);
+                $this->session->set('user', $login['success']['user_id']);
+                $template->set('user', $user->get($login['success']['user_id']));
                 if($from){
                     $this->redirect($from);
                 }

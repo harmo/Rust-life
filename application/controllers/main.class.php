@@ -10,7 +10,8 @@ class Main extends Controller {
         $template = $this->loadView('front/main');
         $template->set('static', $this->staticFiles);
         $template->set('title', $config['project']);
-        $template->set('user', $this->session->get('user'));
+        $user = $this->loadModel('user');
+        $template->set('user', $user->get($this->session->get('user')));
         $template->render();
     }
 

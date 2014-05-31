@@ -6,26 +6,26 @@ class Profile extends Controller {
     }
 
     function index(){
-        $user_session = $this->session->get('user');
-        if(!$user_session){
+        $user_id = $this->session->get('user');
+        if(!$user_id){
             $this->redirect('login');
         }
 
         $template = $this->loadView('front/user/profile');
         $template->set('static', $this->staticFiles);
         $template->set('title', 'Mon profil');
-        $template->set('user', $user_session);
+        $user = $this->loadModel('user');
+        $template->set('user', $user->get($user_id));
 
         if(isset($_POST['send_profile'])){
-            $user = $this->loadModel('user');
             $post = $_POST;
-            $post['user_id'] = $user_session->id;
+            $post['user_id'] = $user_id;
             $profile = $user->updateData($post);
             if(isset($profile['in_error']) && $profile['in_error']){
                 $template->set('errors', $profile['errors']);
             }
             elseif(isset($profile['success'])){
-                $this->session->set('user', $user->get($user_session->id));
+                $this->session->set('user', $user->get($user_id));
                 $template->set('user', $this->session->get('user'));
                 $template->set('success', $profile['success']);
             }

@@ -33,6 +33,9 @@ class User extends Model {
     }
 
     private function loadUser($user){
+        if(!$user){
+            return false;
+        }
         $user_loaded = new stdClass();
         $user_loaded->id        = $this->id         = $user['id'];
         $user_loaded->login     = $this->login      = $user['identifiant'];
@@ -96,7 +99,7 @@ class User extends Model {
             if(sizeof($user) > 1){
                 throw new Exception('More than one user was found !');
             }
-            $success = array('user' => $this->loadUser($user[0]));
+            $success = array('user_id' => $user[0]['id']);
             $data = array(
                 'date'  => $this->escapeString(date('Y-m-d')),
                 'heure' => $this->escapeString(date('H:i:s')),

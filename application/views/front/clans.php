@@ -2,6 +2,8 @@
     <h3>Clans</h3>
 </div>
 
+<?php var_dump($user); ?>
+
 <?php if(sizeof($clans) == 0): ?>
     <div class="lead">Aucun clan</div>
 <?php else: ?>
@@ -28,7 +30,7 @@
                     </td>
                     <td>
                         <?php if($clan->mode == 2): ?>
-
+                            <?php  ?>
                         <?php elseif($clan->mode == 3): ?>
                             on demand
                         <?php endif; ?>

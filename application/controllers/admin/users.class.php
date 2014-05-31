@@ -7,15 +7,16 @@ class Users extends Controller {
     }
 
     function index(){
-        $user_session = $this->session->get('user');
-        if(!$user_session){
+        $user_id = $this->session->get('user');
+        if(!$user_id){
             $this->redirect('login', 'admin');
         }
-        else if(!$user_session->is_admin){
+        $user = $this->loadModel('user');
+        $user_session = $user->get($user_id);
+        if(!$user_session->is_admin){
             $this->redirect('');
         }
 
-        $user = $this->loadModel('user');
         $clan = $this->loadModel('clan');
 
         switch ($this->action){

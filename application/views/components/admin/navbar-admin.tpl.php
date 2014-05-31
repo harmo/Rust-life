@@ -10,7 +10,7 @@
                 <a class="navbar-brand logo" href="/<?php echo BASE_URL; ?>">Rust Life</a>
             </div>
 
-            <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
+            <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="<?php echo $this->template == 'users' ? 'active' : ''; ?>">
                         <a href="/<?php echo BASE_URL; ?>admin/users">Membres</a>

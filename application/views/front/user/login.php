@@ -1,12 +1,9 @@
 <?php if(isset($user) && $user): ?>
-    <div class="alert alert-success alert-dismissable">
+    <div class="page-header">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <h4>Vous êtes connecté</h4>
-        <p>
-            Bienvenue, <?php echo $user->login; ?>
-            &nbsp;<a href="/<?php echo BASE_URL; ?>" class="btn btn-success">Accueil du site</a>
-        </p>
+        <h2>Vous êtes connecté <small>Bienvenue, <?php echo $user->login; ?></small></h2>
     </div>
+    <a href="/<?php echo BASE_URL; ?>" class="btn btn-success">Accueil du site</a>
 <?php else: ?>
     <?php if($action == 'lost'): ?>
         <?php if($params == 'login'): ?>
