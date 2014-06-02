@@ -4,6 +4,7 @@ class Controller {
     public $config;
     public $mode;
     public $action;
+    public $params;
 
     function __construct($core=null){
         if($core != null && is_object($core)){
@@ -24,7 +25,8 @@ class Controller {
                 $this->action = $params[1];
             }
             else {
-                $this->action = $params[0];
+                $this->action = array_shift($params);
+                $this->params = $params;
             }
         }
 
@@ -86,7 +88,10 @@ class Controller {
         return $helper;
     }
 
-    public function redirect($loc, $from=false){
+    public function redirect($loc, $from=false, $timeout=null){
+        if($timeout != null){
+            sleep($timeout);
+        }
         header('Location: /'.$this->config['base_url'].$loc.($from ? '?from='.$from : ''));
     }
 }
