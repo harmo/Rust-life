@@ -6,8 +6,8 @@ class Clan extends Model {
     private $mode;
     private $money;
     private $members;
-    public $owner;
     private $requires;
+    public $owner;
 
     public $available_modes = array(
         1 => 'Privé',
@@ -69,6 +69,10 @@ class Clan extends Model {
     }
 
     public function create($post){
+        if($post['money'] == ''){
+            $post['money'] = 0;
+        }
+
         $errors = $this->checkData($post);
         if(!empty($errors)){
             return array('in_error' => true, 'errors' => $errors);

@@ -67,7 +67,7 @@ jQuery(document).ready(function($){
 
 var Clan = {
     require: function(clan_id){
-        alertify.confirm('<textarea id="require_message" cols="60" rows="10"></textarea>', function(clicked_ok){
+        alertify.confirm('<textarea id="require_message" cols="60" rows="10" style="max-width: 470px;"></textarea>', function(clicked_ok){
             if(clicked_ok){
                 message = $('#require_message').val();
                 if(message == ''){

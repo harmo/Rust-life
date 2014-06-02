@@ -23,6 +23,11 @@ class User extends Model {
         return $this->loadUser($this->selectOne('utilisateurs', '*', array('id' => (int)$id)));
     }
 
+    public function getObject($id){
+        $this->get($id);
+        return $this;
+    }
+
     public function getAll(){
         $users = array();
         foreach($this->selectAll('utilisateurs', '*') as $user){

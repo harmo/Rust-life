@@ -11,6 +11,7 @@
                 <th>Clan</th>
                 <th>Chef</th>
                 <th>Membres</th>
+                <th>Status</th>
                 <th class="text-center">Actions</th>
             </tr>
         </thead>
@@ -26,6 +27,7 @@
                             <?php endforeach; ?>
                         </ul>
                     </td>
+                    <td><?php echo $clan_modes[$clan->mode]; ?></td>
                     <td class="actions text-center">
                         <?php if($clan->mode == Clan::$PUBLIC): ?>
 
