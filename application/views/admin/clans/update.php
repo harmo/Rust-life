@@ -39,10 +39,10 @@
                 </select>
             </div>
         </div>
-        <div class="form-group <?php echo (isset($errors) && isset($errors['monney']) ? 'has-error' : '') ?>">
-            <label for="monney" class="col-sm-2 control-label">Argent</label>
+        <div class="form-group <?php echo (isset($errors) && isset($errors['money']) ? 'has-error' : '') ?>">
+            <label for="money" class="col-sm-2 control-label">Argent</label>
             <div class="col-sm-3">
-                <input type="number" name="monney" class="form-control" id="monney" value="<?php echo $clan_to_update->monney; ?>">
+                <input type="number" name="money" class="form-control" id="money" value="<?php echo $clan_to_update->money; ?>">
             </div>
         </div>
         <div class="form-group <?php echo (isset($errors) && isset($errors['owner']) ? 'has-error' : '') ?>">

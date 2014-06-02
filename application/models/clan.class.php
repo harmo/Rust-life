@@ -4,7 +4,7 @@ class Clan extends Model {
     private $id;
     private $name;
     private $mode;
-    private $monney;
+    private $money;
     private $members;
     public $owner;
     private $requires;
@@ -41,7 +41,7 @@ class Clan extends Model {
         $loaded_clan->id        = $this->id     = $clan['id'];
         $loaded_clan->name      = $this->name   = $clan['name'];
         $loaded_clan->mode      = $this->mode   = $clan['mode'];
-        $loaded_clan->monney    = $this->monney = $clan['monney'];
+        $loaded_clan->money    = $this->money = $clan['money'];
 
         $loaded_members = array();
         $members = $this->selectAll('utilisateurs', '*', array('clan' => $this->id));
@@ -77,7 +77,7 @@ class Clan extends Model {
         $data = array(
             'name' => $post['name'],
             'mode' => (int)$post['mode'],
-            'money' => $post['monney'],
+            'money' => $post['money'],
             'owner' => (int)$post['owner'],
         );
         $clan_id = $this->insertOne('clan', $data);
@@ -103,7 +103,7 @@ class Clan extends Model {
         $data = array(
             'name' => $this->escapeString($post['name']),
             'mode' => (int)$post['mode'],
-            'money' => $post['monney'],
+            'money' => $post['money'],
             'owner' => (int)$post['owner'],
         );
         if(!$this->update('clan', $data, array('id' => $post['clan_id']))){
@@ -151,8 +151,8 @@ class Clan extends Model {
             $errors['name'] = 'Veuillez fournir le nom';
         }
 
-        if(!isset($data['monney']) || $data['monney'] == ''){
-            $errors['monney'] = 'Veuillez indiquer le montant d\'argent';
+        if(!isset($data['money']) || $data['money'] == ''){
+            $errors['money'] = 'Veuillez indiquer le montant d\'argent';
         }
 
         if(!isset($data['owner']) || $data['owner'] == ''){

@@ -25,7 +25,7 @@
                     <tr>
                         <td><?php echo $clan->name; ?></td>
                         <td><?php echo $modes[$clan->mode]; ?></td>
-                        <td><?php echo $clan->monney; ?></td>
+                        <td><?php echo $clan->money; ?></td>
                         <td><?php echo $clan->owner['identifiant']; ?></td>
                         <td>
                             <ul class="list-unstyled">
