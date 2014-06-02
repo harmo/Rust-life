@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
     <li><a href="/<?php echo BASE_URL ?>admin">Tableau de bord</a></li>
-    <li><a href="/<?php echo BASE_URL ?>admin/users">Administration des clans</a></li>
+    <li><a href="/<?php echo BASE_URL ?>admin/clans">Administration des clans</a></li>
     <li class="active">Ajouter un clan</li>
 </ol>
 
