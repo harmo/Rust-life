@@ -95,17 +95,29 @@ class User extends Model {
         }
 
         try {
-            $user = $this->selectAll('utilisateurs', '*', array('identifiant' => $post['login']));
-            if(sizeof($user) > 1){
-                throw new Exception('More than one user was found !');
+            $users = $this->selectAll('utilisateurs', '*', array('identifiant' => $post['login']));
+            if(sizeof($users) > 1){
+                $user_found = false;
+                foreach($users as $user){
+                    if($user['identifiant'] == $post['login']){
+                        $user_found = $user;
+                    }
+                }
+                if(!$user_found){
+                    throw new Exception('More than one user was found !');
+                }
+                $user = $user_found;
             }
-            $success = array('user_id' => $user[0]['id']);
+            else {
+                $user = $user[0];
+            }
+            $success = array('user_id' => $user['id']);
             $data = array(
                 'date'  => $this->escapeString(date('Y-m-d')),
                 'heure' => $this->escapeString(date('H:i:s')),
                 'ip'    => $this->escapeString($this->getUserIp())
             );
-            if(!$this->update('utilisateurs', $data, array('id' => $user[0]['id']))){
+            if(!$this->update('utilisateurs', $data, array('id' => $user['id']))){
                 return array('in_error' => true, 'errors' => array('Mise à jour des informations de connexion impossible'));
             }
             return array('in_error' => false, 'success' => $success);
@@ -126,8 +138,12 @@ class User extends Model {
         if(isset($post['login'])){
             $data['identifiant'] = $this->escapeString($post['login']);
         }
-        $data['email'] = $this->escapeString($post['email']);
-        if($post['password'] != ''){
+
+        if(isset($post['email'])){
+            $data['email'] = $this->escapeString($post['email']);
+        }
+
+        if(isset($post['password']) && $post['password'] != ''){
             $data['motdepasse'] = $this->escapeString($this->hashPassword($post['password']));
         }
         if($by == 'admin'){
@@ -135,6 +151,9 @@ class User extends Model {
             $data['argent'] = $post['monney'] != '' ? $post['monney'] : $this->default_money;
             $data['rang']   = $post['grade'] != '' ? $post['grade'] : 0;
             $data['points'] = $post['points'] != '' ? $post['points'] : 0.0;
+        }
+        elseif(isset($post['clan'])){
+            $data['clan'] = $post['clan'];
         }
 
         if(!$this->update('utilisateurs', $data, array('id' => $post['user_id']))){
@@ -172,9 +191,23 @@ class User extends Model {
     }
 
     public function passwordLost($login){
-        $user = $this->selectOne('utilisateurs', '*', array('identifiant' => $login));
-        if(!$user){
+        $users = $this->selectAll('utilisateurs', '*', array('identifiant' => $login));
+        if(!$users){
             return array('in_error' => true, 'errors' => array('Identifiant introuvable'));
+        }
+        elseif(sizeof($users) > 1){
+            $user_found = false;
+            foreach($users as $user){
+                if($user['identifiant'] == $login){
+                    $user_found = $user;
+                }
+            }
+            if(!$user_found){
+                return array('in_error' => true, 'errors' => array('roblème sur l\'identifiant !'));
+            }
+        }
+        elseif(sizeof($users) == 1){
+            $user = $users[0];
         }
 
         $link = base64_encode('action=reset-password&id='.$user['id']);
@@ -218,8 +251,8 @@ class User extends Model {
                 $errors['login'] = 'L\'identifiant ne doit pas contenir de caractères spéciaux';
             }
             if(!$login && !$updating){
-                $existing_user = $this->selectOne('utilisateurs', 'id', array('identifiant' => $data['login']));
-                if($existing_user){
+                $existing_user = $this->selectOne('utilisateurs', array('id', 'identifiant'), array('identifiant' => $data['login']));
+                if($existing_user && $existing_user['identifiant'] == $data['login']){
                     $errors['login'] = 'Utilisateur existant';
                 }
             }
@@ -245,9 +278,24 @@ class User extends Model {
                 $errors['password'] = 'Mot de passe vide';
             }
             elseif(!$from_user && !isset($errors['login'])){
-                $user = $this->selectOne('utilisateurs', 'motdepasse', array('identifiant' => $data['login']));
-                if(!$user){
+                $users = $this->selectAll('utilisateurs', array('identifiant', 'motdepasse'), array('identifiant' => $data['login']));
+                if(!$users){
                     $errors['login'] = 'Utilisateur introuvable';
+                }
+                elseif(sizeof($users) > 1){
+                    $user_found = false;
+                    foreach($users as $user){
+                        if($user['identifiant'] == $data['login']){
+                            $user_found = $user;
+                        }
+                    }
+                    if(!$user_found){
+                        $errors['login'] = 'Problème sur l\'identifiant !';
+                    }
+                    $user = $user_found;
+                }
+                elseif(sizeof($users) == 1){
+                    $user = $users[0];
                 }
                 elseif($user && !$this->checkPassword($data['password'], $user['motdepasse'])){
                     $errors['password'] = 'Mot de passe erroné';
