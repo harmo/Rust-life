@@ -6,6 +6,11 @@ class Register extends Controller {
     }
 
     function index(){
+        $user_id = $this->session->get('user');
+        if($user_id){
+            $this->redirect('');
+        }
+
         $template = $this->loadView('front/user/register');
         $template->set('static', $this->staticFiles);
         $template->set('title', 'Créer un compte');

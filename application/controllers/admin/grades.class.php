@@ -9,7 +9,7 @@ class Grades extends Controller {
     function index(){
         $user_id = $this->session->get('user');
         if(!$user_id){
-            $this->redirect('login', 'admin');
+            $this->redirect('login', 'admin/grades');
         }
         $user = $this->loadModel('user');
         $user_session = $user->get($user_id);

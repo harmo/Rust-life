@@ -9,12 +9,12 @@ class Clans extends Controller {
     function index(){
         $user_id = $this->session->get('user');
         if(!$user_id){
-            $this->redirect('login', 'admin');
+            $this->redirect('login', 'admin/clans');
         }
         $user = $this->loadModel('user');
         $user_session = $user->get($user_id);
         if(!$user_session->is_admin){
-            $this->redirect('');
+            $this->redirect();
         }
 
         $clan = $this->loadModel('clan');

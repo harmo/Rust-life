@@ -9,7 +9,7 @@ class Users extends Controller {
     function index(){
         $user_id = $this->session->get('user');
         if(!$user_id){
-            $this->redirect('login', 'admin');
+            $this->redirect('login', 'admin/users');
         }
         $user = $this->loadModel('user');
         $user_session = $user->get($user_id);
