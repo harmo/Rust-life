@@ -77,7 +77,7 @@ class Clan extends Model {
         $data = array(
             'name' => $post['name'],
             'mode' => (int)$post['mode'],
-            'monney' => $post['monney'],
+            'money' => $post['monney'],
             'owner' => (int)$post['owner'],
         );
         $clan_id = $this->insertOne('clan', $data);
@@ -103,7 +103,7 @@ class Clan extends Model {
         $data = array(
             'name' => $this->escapeString($post['name']),
             'mode' => (int)$post['mode'],
-            'monney' => $post['monney'],
+            'money' => $post['monney'],
             'owner' => (int)$post['owner'],
         );
         if(!$this->update('clan', $data, array('id' => $post['clan_id']))){
