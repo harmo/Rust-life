@@ -38,10 +38,10 @@
                 </select>
             </div>
         </div>
-        <div class="form-group <?php echo (isset($errors) && isset($errors['monney']) ? 'has-error' : '') ?>">
-            <label for="monney" class="col-sm-2 control-label">Argent</label>
+        <div class="form-group <?php echo (isset($errors) && isset($errors['money']) ? 'has-error' : '') ?>">
+            <label for="money" class="col-sm-2 control-label">Argent</label>
             <div class="col-sm-3">
-                <input type="number" name="monney" class="form-control" id="monney" value="<?php echo isset($_POST['monney']) ? $_POST['monney'] : '0'; ?>">
+                <input type="number" name="money" class="form-control" id="money" value="<?php echo isset($_POST['money']) ? $_POST['money'] : '0'; ?>">
             </div>
         </div>
         <div class="form-group <?php echo (isset($errors) && isset($errors['owner']) ? 'has-error' : '') ?>">
