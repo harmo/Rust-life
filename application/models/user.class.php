@@ -109,7 +109,7 @@ class User extends Model {
                 $user = $user_found;
             }
             else {
-                $user = $user[0];
+                $user = $users[0];
             }
             $success = array('user_id' => $user['id']);
             $data = array(
