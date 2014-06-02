@@ -99,6 +99,10 @@ class Clan extends Model {
     }
 
     public function updateData($post){
+        if($post['money'] == ''){
+            $post['money'] = 0;
+        }
+
         $errors = $this->checkData($post);
         if(!empty($errors)){
             return array('in_error' => true, 'errors' => $errors);
@@ -153,10 +157,6 @@ class Clan extends Model {
 
         if(!isset($data['name']) || $data['name'] == ''){
             $errors['name'] = 'Veuillez fournir le nom';
-        }
-
-        if(!isset($data['money']) || $data['money'] == ''){
-            $errors['money'] = 'Veuillez indiquer le montant d\'argent';
         }
 
         if(!isset($data['owner']) || $data['owner'] == ''){
