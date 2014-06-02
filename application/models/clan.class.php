@@ -217,7 +217,7 @@ class Clan extends Model {
     }
 
     public function refuseRequire($require, $user){
-        eturn array('in_error' => true, 'errors' => array('Not implemented yet'));
+        return array('in_error' => true, 'errors' => array('Not implemented yet'));
     }
 
     public function changeOwner($user){
