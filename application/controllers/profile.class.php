@@ -25,7 +25,7 @@ class Profile extends Controller {
                 $template->set('errors', $profile['errors']);
             }
             elseif(isset($profile['success'])){
-                $this->session->set('user', $user->get($user_id));
+                $this->session->set('user', $user_id);
                 $template->set('user', $this->session->get('user'));
                 $template->set('success', $profile['success']);
             }

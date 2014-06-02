@@ -6,17 +6,25 @@ class Clan extends Model {
     private $mode;
     private $monney;
     private $members;
-    private $owner;
+    public $owner;
+    private $requires;
 
     public $available_modes = array(
         1 => 'Privé',
         2 => 'Public',
         3 => 'Sur demande'
     );
+    public static $PRIVATE = 1;
     public static $PUBLIC = 2;
+    public static $ON_DEMAND = 3;
 
     public function get($id){
         return $this->loadClan($this->selectOne('clan', '*', array('id' => (int)$id)));
+    }
+
+    public function getObject($id){
+        $this->get($id);
+        return $this;
     }
 
     public function getAll(){
@@ -44,6 +52,18 @@ class Clan extends Model {
             }
         }
         $loaded_clan->members = $this->members = $loaded_members;
+
+        $loaded_requires = array();
+        $requires = $this->selectAll('clan_require', '*', array('clan' => $this->id));
+        foreach($requires as $require){
+            $loaded_requires[$require['user']] = array(
+                'id' => $require['id'],
+                'message' => $require['message'],
+                'user' => $this->selectOne('utilisateurs', '*', array('id' => $require['user']))
+            );
+        }
+        $loaded_clan->requires = $this->requires = $loaded_requires;
+
 
         return$loaded_clan;
     }
@@ -144,5 +164,68 @@ class Clan extends Model {
         }
 
         return $errors;
+    }
+
+    public function addUser($user){
+        $data = array('user_id' => $user->id, 'clan' => $this->id);
+        return $user->updateData($data);
+    }
+
+    public function removeUser($user){
+        $data = array('user_id' => $user->id, 'clan' => 'NULL');
+        return $user->updateData($data);
+    }
+
+    public function requireInvitation($user, $message){
+        $data = array(
+            'user' => $user->id,
+            'clan' => $this->id,
+            'message' => $message
+        );
+        $require_id = $this->insertOne('clan_require', $data);
+        if(!$require_id){
+            return array('in_error' => true, 'errors' => array('Enregistrement de la demande impossible'));
+        }
+
+        array_push($this->requires, $data);
+
+        return array('in_error' => false);
+    }
+
+    public function cancelInvitation($user){
+        if(isset($this->requires[$user->id])){
+            unset($this->requires[$user->id]);
+            return $this->delete('clan_require', array('user' => $user->id, 'clan' => $this->id));
+        }
+        return false;
+    }
+
+    public function getRequire($require_id){
+        return $this->selectOne('clan_require', '*', array('id' => (int)$require_id));
+    }
+
+    public function acceptRequire($require, $user){
+        if(is_array($require) && is_object($user)){
+            if($this->addUser($user)){
+                if($this->delete('clan_require', array('id' => $require['id'], 'user' => $user->id))){
+                    return array('in_error' => false);
+                }
+            }
+            return array('in_error' => true, 'errors' => array('Impossible d\'accepter la demande'));
+        }
+        return array('in_error' => true, 'errors' => array('Mauvais paramètres'));
+    }
+
+    public function refuseRequire($require, $user){
+        eturn array('in_error' => true, 'errors' => array('Not implemented yet'));
+    }
+
+    public function changeOwner($user){
+        $data = array('owner' => $user->id);
+        $this->owner = $user;
+        if(!$this->update('clan', array('owner' => $user->id), array('id' => $this->id))){
+            return array('in_error' => true, 'errors' => array('Impossible de changer de chef'));
+        }
+        return array('in_error' => false);
     }
 }

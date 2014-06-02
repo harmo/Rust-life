@@ -30,3 +30,40 @@ body {
 .select2-input {
     min-width: 262px !important;
 }
+
+
+table.clans .glyphicon {
+    font-size: 25px !important;
+}
+
+table.clans td.actions {
+    width: 130px;
+}
+
+table.clans td.actions a {
+    margin-right: 10px;
+}
+
+tr.my_clan td {
+    background-color: #48692A !important;
+}
+
+table.require-line {
+    display: none;
+}
+
+table.require-line .glyphicon {
+    font-size: 25px !important;
+}
+
+table.require-line a {
+    margin-right: 10px;
+}
+
+table.require-line td.actions {
+    width: 130px;
+}
+
+table.require-line td.member {
+    width: 140px;
+}

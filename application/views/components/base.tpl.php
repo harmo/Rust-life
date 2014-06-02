@@ -16,5 +16,9 @@
     <?php include 'footer.tpl.php' ?>
 
     <?php include 'scripts.tpl.php'; ?>
+
+    <script type="text/javascript">
+        var BASE_URL = '/<?php echo BASE_URL; ?>';
+    </script>
 </body>
 </html>
