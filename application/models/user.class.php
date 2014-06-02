@@ -182,9 +182,9 @@ class User extends Model {
             return array('in_error' => true, 'errors' => array('Adresse e-mail introuvable'));
         }
 
-        $message = 'Vous avez effectué une demande de récupération d\'identifiant sur le site rust-life.fr.
-            <br>Votre adresse e-amil est liée à l\'identifiant : '.$user['identifiant'];
-        if(!mail($user['email'], '[Rust-life.fr] Récupération d\'identifiant', $message)){
+        $message = 'Vous avez effectu&eacute; une demande de r&eacute;cup&eacute;ration d\'identifiant sur le site rust-life.fr.
+            <br>Votre adresse e-amil est li&eacute;e à l\'identifiant : '.$user['identifiant'];
+        if(!mail($user['email'], '[Rust-life.fr] R&eacute;cup&eacute;ration d\'identifiant', $message)){
             return array('in_error' => true, 'errors' => array('Impossible d\'envoyer le mail'));
         }
         return array('in_error' => false, 'success' => $user['email']);
@@ -203,7 +203,7 @@ class User extends Model {
                 }
             }
             if(!$user_found){
-                return array('in_error' => true, 'errors' => array('roblème sur l\'identifiant !'));
+                return array('in_error' => true, 'errors' => array('Probl&eagrav;me sur l\'identifiant !'));
             }
         }
         elseif(sizeof($users) == 1){
@@ -212,9 +212,9 @@ class User extends Model {
 
         $link = base64_encode('action=reset-password&id='.$user['id']);
         $url = BASE_URL.'reset_password/'.$link;
-        $message = 'Vous avez effectué une demande de récupération de mot de passe sur le site rust-life.fr.
-            <br>Veuillez cliquer sur le lien suivant pour le réinitialiser : http://rust-life.fr/'.$url;
-        if(!mail($user['email'], '[Rust-life.fr] Récupération de mot de passe', $message)){
+        $message = 'Vous avez effectu&eacute; une demande de r&eacute;cup&eacute;ration de mot de passe sur le site rust-life.fr.
+            <br>Veuillez cliquer sur le lien suivant pour le r&eacute;initialiser : http://rust-life.fr/'.$url;
+        if(!mail($user['email'], '[Rust-life.fr] R&eacute;cup&eacute;ration de mot de passe', $message)){
             return array('in_error' => true, 'errors' => array('Impossible d\'envoyer le mail'));
         }
         return array('in_error' => false, 'success' => true);
@@ -245,10 +245,10 @@ class User extends Model {
                 $errors['login'] = 'Identifiant vide';
             }
             elseif(strlen($data['login']) > 64 || strlen($data['login']) < 2){
-                $errors['login'] = 'L\'identifiant doit contenir entre 2 et 64 caractères';
+                $errors['login'] = 'L\'identifiant doit contenir entre 2 et 64 caract&eagrav;res';
             }
             elseif(preg_match('/^[a-z\d-_.]{2,64}$/i', $data['login']) == 0){
-                $errors['login'] = 'L\'identifiant ne doit pas contenir de caractères spéciaux';
+                $errors['login'] = 'L\'identifiant ne doit pas contenir de caract&eagrav;res sp&eacute;ciaux';
             }
             if(!$login && !$updating){
                 $existing_user = $this->selectOne('utilisateurs', array('id', 'identifiant'), array('identifiant' => $data['login']));
@@ -290,7 +290,7 @@ class User extends Model {
                         }
                     }
                     if(!$user_found){
-                        $errors['login'] = 'Problème sur l\'identifiant !';
+                        $errors['login'] = 'Probl&eagrav;me sur l\'identifiant !';
                     }
                     $user = $user_found;
                 }
@@ -298,7 +298,7 @@ class User extends Model {
                     $user = $users[0];
                 }
                 elseif($user && !$this->checkPassword($data['password'], $user['motdepasse'])){
-                    $errors['password'] = 'Mot de passe erroné';
+                    $errors['password'] = 'Mot de passe erron&eacute;';
                 }
             }
             if($from_user && $data['password'] != ''){
