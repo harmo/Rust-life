@@ -84,23 +84,27 @@
                 </tr>
 
                 <?php if($clan->owner['id'] == $user->id && !empty($clan->requires)): ?>
-                    <table class="table table-bordered require-line clan_<?php echo $clan->id; ?>">
-                        <tr>
-                            <th class="member">Membre</th>
-                            <th>Message</th>
-                            <th class="actions text-center">Actions</th>
-                        </tr>
-                        <?php foreach($clan->requires as $require): ?>
-                            <tr class="line" data-id="<?php echo $require['id']; ?>">
-                                <td class="member"><strong><?php echo $require['user']['identifiant']; ?></strong></td>
-                                <td><?php echo $require['message']; ?></td>
-                                <td class="actions text-center">
-                                    <a href="#" class="accept-require" title="Accepter"><span class="glyphicon glyphicon-ok-sign"></span></a>
-                                    <a href="#" class="refuse-require" title="Refuser"><span class="glyphicon glyphicon-minus-sign"></span></a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
+                    <tr>
+                        <td colspan="5">
+                            <table class="table table-bordered require-line clan_<?php echo $clan->id; ?>">
+                                <tr>
+                                    <th class="member">Membre</th>
+                                    <th>Message</th>
+                                    <th class="actions text-center">Actions</th>
+                                </tr>
+                                <?php foreach($clan->requires as $require): ?>
+                                    <tr class="line" data-id="<?php echo $require['id']; ?>">
+                                        <td class="member"><strong><?php echo $require['user']['identifiant']; ?></strong></td>
+                                        <td><?php echo $require['message']; ?></td>
+                                        <td class="actions text-center">
+                                            <a href="#" class="accept-require" title="Accepter"><span class="glyphicon glyphicon-ok-sign"></span></a>
+                                            <a href="#" class="refuse-require" title="Refuser"><span class="glyphicon glyphicon-minus-sign"></span></a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </table>
+                        </td>
+                    </tr>
                 <?php endif; ?>
 
             <?php endforeach; ?>

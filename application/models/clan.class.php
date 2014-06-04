@@ -29,7 +29,7 @@ class Clan extends Model {
 
     public function getAll(){
         $clans = array();
-        foreach($this->selectAll('clan', '*') as $clan){
+        foreach($this->selectAll('clan', '*', null, 'ORDER BY name ASC') as $clan){
             $loaded_clan = $this->loadClan($clan);
             $clans[$loaded_clan->id] = $loaded_clan;
         }

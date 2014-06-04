@@ -33,7 +33,7 @@ class User extends Model {
 
     public function getAll(){
         $users = array();
-        foreach($this->selectAll('utilisateurs', '*') as $user){
+        foreach($this->selectAll('utilisateurs', '*', null, 'ORDER BY identifiant ASC') as $user){
             $loaded_user = $this->loadUser($user);
             $users[$loaded_user->id] = $loaded_user;
         }

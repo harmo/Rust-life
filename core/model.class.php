@@ -51,16 +51,16 @@ class Model {
     }
 
     public function selectOne($table, $fields, $where=null, $other=null){
-        $this->select($table, $fields, $where, $other=null);
+        $this->select($table, $fields, $where, $other);
         return $this->single();
     }
 
     public function selectAll($table, $fields, $where=null, $other=null){
-        $this->select($table, $fields, $where, $other=null);
+        $this->select($table, $fields, $where, $other);
         return $this->resultSet();
     }
 
-    private function select($table, $fields, $where=null, $other=null){
+    private function select($table, $fields, $where, $other){
         $fields = !is_array($fields) ? array($fields) : $fields;
         $fields = implode(', ', $fields);
         $where_query = '';
