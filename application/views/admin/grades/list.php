@@ -3,7 +3,7 @@
     <li><a href="/<?php echo BASE_URL ?>admin/grades">Administration des rangs</a></li>
     <li class="active">Liste des rangs</li>
 </ol>
-<div class="lead">
+<div class="wrapper-content">
     <?php if(empty($grades)): ?>
         Aucun rang enregistré.
     <?php else: ?>

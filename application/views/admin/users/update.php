@@ -21,59 +21,61 @@
         <h4>Utilisateur modifié avec succès !</h4>
     </div>
 <?php else: ?>
-    <form class="form-horizontal" role="form" method="post">
-        <input type="hidden" name="user_id" value="<?php echo $user_to_update->id; ?>">
-        <div class="form-group <?php echo (isset($errors) && isset($errors['login']) ? 'has-error' : '') ?>">
-            <label for="login" class="col-sm-4 control-label">Identifiant</label>
-            <div class="col-sm-3">
-                <input type="text" name="login" class="form-control" id="login" value="<?php echo $user_to_update->login; ?>">
+    <div class="wrapper-content">
+        <form class="form-horizontal" role="form" method="post">
+            <input type="hidden" name="user_id" value="<?php echo $user_to_update->id; ?>">
+            <div class="form-group <?php echo (isset($errors) && isset($errors['login']) ? 'has-error' : '') ?>">
+                <label for="login" class="col-sm-4 control-label">Identifiant</label>
+                <div class="col-sm-3">
+                    <input type="text" name="login" class="form-control" id="login" value="<?php echo $user_to_update->login; ?>">
+                </div>
             </div>
-        </div>
-        <div class="form-group <?php echo (isset($errors) && isset($errors['email']) ? 'has-error' : '') ?>">
-            <label for="email" class="col-sm-4 control-label">Adresse e-mail</label>
-            <div class="col-sm-3">
-                <input type="text" name="email" class="form-control" id="email" value="<?php echo $user_to_update->email; ?>">
+            <div class="form-group <?php echo (isset($errors) && isset($errors['email']) ? 'has-error' : '') ?>">
+                <label for="email" class="col-sm-4 control-label">Adresse e-mail</label>
+                <div class="col-sm-3">
+                    <input type="text" name="email" class="form-control" id="email" value="<?php echo $user_to_update->email; ?>">
+                </div>
             </div>
-        </div>
-        <div class="form-group <?php echo (isset($errors) && isset($errors['password']) ? 'has-error' : '') ?>">
-            <label for="password" class="col-sm-4 control-label">Mot de passe <br>(laisser vide pour ne pas mettre à jour)</label>
-            <div class="col-sm-3">
-                <input type="password" name="password" class="form-control" id="password">
+            <div class="form-group <?php echo (isset($errors) && isset($errors['password']) ? 'has-error' : '') ?>">
+                <label for="password" class="col-sm-4 control-label">Mot de passe <br>(laisser vide pour ne pas mettre à jour)</label>
+                <div class="col-sm-3">
+                    <input type="password" name="password" class="form-control" id="password">
+                </div>
             </div>
-        </div>
-        <div class="form-group <?php echo (isset($errors) && isset($errors['grade']) ? 'has-error' : '') ?>">
-            <label for="grade" class="col-sm-4 control-label">Rang</label>
-            <div class="col-sm-3">
-                <input type="text" name="grade" class="form-control" id="grade" value="<?php echo $user_to_update->grade; ?>">
+            <div class="form-group <?php echo (isset($errors) && isset($errors['grade']) ? 'has-error' : '') ?>">
+                <label for="grade" class="col-sm-4 control-label">Rang</label>
+                <div class="col-sm-3">
+                    <input type="text" name="grade" class="form-control" id="grade" value="<?php echo $user_to_update->grade; ?>">
+                </div>
             </div>
-        </div>
-        <div class="form-group <?php echo (isset($errors) && isset($errors['points']) ? 'has-error' : '') ?>">
-            <label for="points" class="col-sm-4 control-label">Points</label>
-            <div class="col-sm-3">
-                <input type="text" name="points" class="form-control" id="points" value="<?php echo $user_to_update->points; ?>">
+            <div class="form-group <?php echo (isset($errors) && isset($errors['points']) ? 'has-error' : '') ?>">
+                <label for="points" class="col-sm-4 control-label">Points</label>
+                <div class="col-sm-3">
+                    <input type="text" name="points" class="form-control" id="points" value="<?php echo $user_to_update->points; ?>">
+                </div>
             </div>
-        </div>
-        <div class="form-group <?php echo (isset($errors) && isset($errors['monney']) ? 'has-error' : '') ?>">
-            <label for="monney" class="col-sm-4 control-label">Argent</label>
-            <div class="col-sm-3">
-                <input type="text" name="monney" class="form-control" id="monney" value="<?php echo $user_to_update->monney; ?>">
+            <div class="form-group <?php echo (isset($errors) && isset($errors['monney']) ? 'has-error' : '') ?>">
+                <label for="monney" class="col-sm-4 control-label">Argent</label>
+                <div class="col-sm-3">
+                    <input type="text" name="monney" class="form-control" id="monney" value="<?php echo $user_to_update->monney; ?>">
+                </div>
             </div>
-        </div>
-        <div class="form-group <?php echo (isset($errors) && isset($errors['clan']) ? 'has-error' : '') ?>">
-            <label for="clan" class="col-sm-4 control-label">Clan</label>
-            <div class="col-sm-3">
-                <select name="clan" id="clan" class="form-control clan-select">
-                    <option value="">-- Choisir --</option>
-                    <?php foreach($clans as $id => $clan): ?>
-                        <?php echo '<option value="'.$id.'"'.($id == $user_to_update->clan  ? 'selected="selected"' : '').'>'.$clan->name.'</option>'; ?>
-                    <?php endforeach; ?>
-                </select>
+            <div class="form-group <?php echo (isset($errors) && isset($errors['clan']) ? 'has-error' : '') ?>">
+                <label for="clan" class="col-sm-4 control-label">Clan</label>
+                <div class="col-sm-3">
+                    <select name="clan" id="clan" class="form-control clan-select">
+                        <option value="">-- Choisir --</option>
+                        <?php foreach($clans as $id => $clan): ?>
+                            <?php echo '<option value="'.$id.'"'.($id == $user_to_update->clan  ? 'selected="selected"' : '').'>'.$clan->name.'</option>'; ?>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-4 col-sm-3">
-                <button type="submit" name="update_user" class="btn btn-primary">Mettre à jour</button>
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-3">
+                    <button type="submit" name="update_user" class="btn btn-primary">Mettre à jour</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 <?php endif ?>

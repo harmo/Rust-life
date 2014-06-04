@@ -20,6 +20,14 @@ body {
 
 .wrapper-content {
     min-height: 600px;
+    background-color: rgba(28, 30, 34, 0.85);
+    padding: 15px;
+}
+
+.footer .container {
+    background-color: rgba(28, 30, 34, 0.85);
+    min-height: 50px;
+    padding: 10px;
 }
 
 .lost-link a {

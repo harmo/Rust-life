@@ -20,15 +20,17 @@
         <h4>Rang supprimé avec succès</h4>
     </div>
 <?php else: ?>
-    <form role="form" method="post">
-        <input type="hidden" name="grade_id" value="<?php echo $grade->id; ?>">
-        <div class="form-group">
-            Êtes-vous sûr de vouloir supprimer le rang <strong><?php echo $grade->name; ?></strong> ?
-        </div>
-        <div class="form-group">
-            <button type="submit" name="confirm" class="btn btn-success">Confirmer</button>
-            &nbsp;
-            <button type="submit" name="cancel" class="btn btn-danger">Annuler</button>
-        </div>
-    </form>
+    <div class="wrapper-content">
+        <form role="form" method="post">
+            <input type="hidden" name="grade_id" value="<?php echo $grade->id; ?>">
+            <div class="form-group">
+                Êtes-vous sûr de vouloir supprimer le rang <strong><?php echo $grade->name; ?></strong> ?
+            </div>
+            <div class="form-group">
+                <button type="submit" name="confirm" class="btn btn-success">Confirmer</button>
+                &nbsp;
+                <button type="submit" name="cancel" class="btn btn-danger">Annuler</button>
+            </div>
+        </form>
+    </div>
 <?php endif ?>

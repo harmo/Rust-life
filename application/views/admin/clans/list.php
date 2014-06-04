@@ -4,7 +4,7 @@
     <li class="active">Liste des clans</li>
 </ol>
 
-<div class="lead">
+<div class="wrapper-content">
     <?php if(empty($clans)): ?>
         Aucun clan enregistré.<br>
         <a class="btn btn-default" href="/<?php echo BASE_URL; ?>admin/clans/add">Ajouter</a>

@@ -21,23 +21,25 @@
         <h4>Permission créée avec succès !</h4>
     </div>
 <?php else: ?>
-    <form class="form-horizontal" role="form" method="post">
-        <div class="form-group <?php echo (isset($errors) && isset($errors['name']) ? 'has-error' : '') ?>">
-            <label for="name" class="col-sm-2 control-label">Nom (sans_espaces)</label>
-            <div class="col-sm-3">
-                <input type="text" name="name" class="form-control" id="name" value="<?php echo isset($_POST['name']) ? $_POST['name'] : ''; ?>">
+    <div class="wrapper-content">
+        <form class="form-horizontal" role="form" method="post">
+            <div class="form-group <?php echo (isset($errors) && isset($errors['name']) ? 'has-error' : '') ?>">
+                <label for="name" class="col-sm-2 control-label">Nom (sans_espaces)</label>
+                <div class="col-sm-3">
+                    <input type="text" name="name" class="form-control" id="name" value="<?php echo isset($_POST['name']) ? $_POST['name'] : ''; ?>">
+                </div>
             </div>
-        </div>
-        <div class="form-group <?php echo (isset($errors) && isset($errors['desc']) ? 'has-error' : '') ?>">
-            <label for="desc" class="col-sm-2 control-label">Description courte</label>
-            <div class="col-sm-3">
-                <input type="text" name="desc" class="form-control" id="desc" value="<?php echo isset($_POST['desc']) ? $_POST['desc'] : ''; ?>">
+            <div class="form-group <?php echo (isset($errors) && isset($errors['desc']) ? 'has-error' : '') ?>">
+                <label for="desc" class="col-sm-2 control-label">Description courte</label>
+                <div class="col-sm-3">
+                    <input type="text" name="desc" class="form-control" id="desc" value="<?php echo isset($_POST['desc']) ? $_POST['desc'] : ''; ?>">
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-3">
-                <button type="submit" name="add_perm" class="btn btn-primary">Ajouter</button>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-3">
+                    <button type="submit" name="add_perm" class="btn btn-primary">Ajouter</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 <?php endif ?>

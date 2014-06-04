@@ -4,7 +4,7 @@
     <li class="active">Liste des permissions</li>
 </ol>
 
-<div class="lead">
+<div class="wrapper-content">
     <?php if(empty($permissions)): ?>
         Aucune permission enregistrée.
     <?php else: ?>

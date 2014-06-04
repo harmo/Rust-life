@@ -7,7 +7,7 @@
 <body>
     <?php include 'navbar-admin.tpl.php' ?>
 
-    <div class="wrapper-content container">
+    <div class="container">
         <?php echo $this->content(); ?>
     </div>
 

@@ -20,15 +20,17 @@
         <h4>Permission supprimé avec succès</h4>
     </div>
 <?php else: ?>
-    <form role="form" method="post">
-        <input type="hidden" name="permission_id" value="<?php echo $permission->id; ?>">
-        <div class="form-group">
-            Êtes-vous sûr de vouloir supprimer la permission <strong><?php echo $permission->slug; ?></strong> ?
-        </div>
-        <div class="form-group">
-            <button type="submit" name="confirm" class="btn btn-success">Confirmer</button>
-            &nbsp;
-            <button type="submit" name="cancel" class="btn btn-danger">Annuler</button>
-        </div>
-    </form>
+    <div class="wrapper-content">
+        <form role="form" method="post">
+            <input type="hidden" name="permission_id" value="<?php echo $permission->id; ?>">
+            <div class="form-group">
+                Êtes-vous sûr de vouloir supprimer la permission <strong><?php echo $permission->slug; ?></strong> ?
+            </div>
+            <div class="form-group">
+                <button type="submit" name="confirm" class="btn btn-success">Confirmer</button>
+                &nbsp;
+                <button type="submit" name="cancel" class="btn btn-danger">Annuler</button>
+            </div>
+        </form>
+    </div>
 <?php endif ?>
