@@ -1,15 +1,17 @@
 body {
     padding-top: 70px;
+	background-image: url('http://www.gamingdragons.com/images/game_img/screenshots/rust/ss_sdnifwbe8yf934tcywng49t5%20(2).jpg');
 }
 
 .logo {
     /*color: #CE422B !important;*/
-    color: #058106 !important;
+    color: white !important;
     font-size: 30px;
 }
 
 .page-header {
-    color: #CE422B !important;
+    /*color: #CE422B !important;*/
+	color: white !important;
 }
 
 .breadcrumb li.active {
