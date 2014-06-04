@@ -62,8 +62,8 @@ tr.my_clan td {
     background-color: #48692A !important;
 }
 
-table.require-line {
-    display: none;
+tr.require-line {
+    display: none !important;
 }
 
 table.require-line .glyphicon {
