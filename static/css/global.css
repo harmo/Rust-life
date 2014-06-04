@@ -63,7 +63,7 @@ tr.my_clan td {
 }
 
 tr.require-line {
-    display: none !important;
+    display: none;
 }
 
 table.require-line .glyphicon {
