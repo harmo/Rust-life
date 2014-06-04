@@ -11,6 +11,9 @@ class User extends Model {
     public $password;
     public $datetime;
     public $ip;
+    public $is_admin;
+    public $blocked;
+    public $lost_attempts;
 
     private $default_money = 200;
     private $admin_grade = 10;
@@ -42,17 +45,19 @@ class User extends Model {
             return false;
         }
         $user_loaded = new stdClass();
-        $user_loaded->id        = $this->id         = $user['id'];
-        $user_loaded->login     = $this->login      = $user['identifiant'];
-        $user_loaded->clan      = $this->clan       = $user['clan'];
-        $user_loaded->monney    = $this->monney     = $user['argent'];
-        $user_loaded->grade     = $this->grade      = $user['rang'];
-        $user_loaded->points    = $this->points     = $user['points'];
-        $user_loaded->email     = $this->email      = $user['email'];
-        $user_loaded->password  = $this->password   = $user['motdepasse'];
-        $user_loaded->datetime  = $this->datetime   = $user['date'].' '.$user['heure'];
-        $user_loaded->ip        = $this->ip         = $user['ip'];
-        $user_loaded->is_admin  = $this->is_admin   = $this->isAdmin();
+        $user_loaded->id            = $this->id             = $user['id'];
+        $user_loaded->login         = $this->login          = $user['identifiant'];
+        $user_loaded->clan          = $this->clan           = $user['clan'];
+        $user_loaded->monney        = $this->monney         = $user['argent'];
+        $user_loaded->grade         = $this->grade          = $user['rang'];
+        $user_loaded->points        = $this->points         = $user['points'];
+        $user_loaded->email         = $this->email          = $user['email'];
+        $user_loaded->password      = $this->password       = $user['motdepasse'];
+        $user_loaded->datetime      = $this->datetime       = $user['date'].' '.$user['heure'];
+        $user_loaded->ip            = $this->ip             = $user['ip'];
+        $user_loaded->blocked       = $this->blocked        = $user['blocked'] == 0 ? false : true;
+        $user_loaded->lost_attempts = $this->lost_attempts  = $user['lost_attempts'];
+        $user_loaded->is_admin      = $this->is_admin       = $this->isAdmin();
         return $user_loaded;
     }
 
@@ -116,6 +121,11 @@ class User extends Model {
             else {
                 $user = $users[0];
             }
+
+            if($user['blocked']){
+                return array('in_error' => true, 'errors' => array('Votre compte est bloqué, veuillez contacter un administrateur du site'));
+            }
+
             $success = array('user_id' => $user['id']);
             $data = array(
                 'date'  => $this->escapeString(date('Y-m-d')),
@@ -161,6 +171,13 @@ class User extends Model {
             $data['clan'] = $post['clan'];
         }
 
+        if(isset($post['lost_attempts'])){
+            $data['lost_attempts'] = $post['lost_attempts'];
+        }
+        if(isset($post['blocked'])){
+            $data['blocked'] = $post['blocked'];
+        }
+
         if(!$this->update('utilisateurs', $data, array('id' => $post['user_id']))){
             return array('in_error' => true, 'errors' => array('Enregistrement de l\'utilisateur impossible'));
         }
@@ -188,11 +205,15 @@ class User extends Model {
         }
 
         $message = 'Vous avez effectu&eacute; une demande de r&eacute;cup&eacute;ration d\'identifiant sur le site rust-life.fr.
-            <br>Votre adresse e-amil est li&eacute;e à l\'identifiant : '.$user['identifiant'];
+            '."\n".'Votre adresse e-amil est li&eacute;e à l\'identifiant : '.$user['identifiant'];
         if(!mail($user['email'], '[Rust-life.fr] R&eacute;cup&eacute;ration d\'identifiant', $message)){
             return array('in_error' => true, 'errors' => array('Impossible d\'envoyer le mail'));
         }
-        return array('in_error' => false, 'success' => $user['email']);
+
+        if($this->incrementLostAttempts($user)){
+            return array('in_error' => false, 'success' => $user['email']);
+        }
+        return array('in_error' => true, 'errors' => array('Votre compte est bloqué car trop de tentatives, un message est parvenu à l\'administrateur du site'));
     }
 
     public function passwordLost($login){
@@ -218,11 +239,15 @@ class User extends Model {
         $link = base64_encode('action=reset-password&id='.$user['id']);
         $url = BASE_URL.'reset_password/'.$link;
         $message = 'Vous avez effectu&eacute; une demande de r&eacute;cup&eacute;ration de mot de passe sur le site rust-life.fr.
-            <br>Veuillez cliquer sur le lien suivant pour le r&eacute;initialiser : http://rust-life.fr/'.$url;
+            '."\n".'Veuillez cliquer sur le lien suivant pour le r&eacute;initialiser : http://rust-life.fr/'.$url;
         if(!mail($user['email'], '[Rust-life.fr] R&eacute;cup&eacute;ration de mot de passe', $message)){
             return array('in_error' => true, 'errors' => array('Impossible d\'envoyer le mail'));
         }
-        return array('in_error' => false, 'success' => true);
+
+        if($this->incrementLostAttempts($user)){
+            return array('in_error' => false, 'success' => true);
+        }
+        return array('in_error' => true, 'errors' => array('Votre compte est bloqué car trop de tentatives, un message est parvenu à l\'administrateur du site'));
     }
 
     public function resetPassword($post, $user_id){
@@ -344,6 +369,31 @@ class User extends Model {
         else {
             return $_SERVER['REMOTE_ADDR'];
         }
+    }
+
+    private function incrementLostAttempts($user){
+        if($user['lost_attempts'] <= 2){
+            $user['lost_attempts'] ++;
+            $this->updateData(array('lost_attempts' => $user['lost_attempts'], 'user_id' => $user['id']));
+            return true;
+        }
+        else {
+            $user['blocked'] = true;
+            $this->updateData(array('blocked' => 1, 'user_id' => $user['id']));
+            global $config;
+            $message = 'Bonjour,'."\n".'Le compte de '.$user['identifiant'].' ('.$user['email'].') est bloqué.';
+            foreach($config['admins'] as $admin_mail){
+                mail($admin_mail, '[Rust-life.fr] Compte bloqué', $message);
+            }
+            return false;
+        }
+    }
+
+    public function unblock(){
+        $this->lost_attempts = 0;
+        $this->blocked = 0;
+        $data = array('user_id' => $this->id, 'lost_attempts' => $this->lost_attempts, 'blocked' => $this->blocked);
+        return $this->updateData($data);
     }
 
 }

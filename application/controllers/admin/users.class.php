@@ -86,6 +86,29 @@ class Users extends Controller {
                 }
                 break;
 
+            case 'unblock':
+                if($this->params == null || isset($_POST['cancel'])){
+                    $this->redirect('admin/users/list');
+                }
+
+                $blocked_user = $user->get($this->params);
+
+                $this->template = $this->loadView('admin/users/unblock');
+                $this->template->set('blocked_user', $blocked_user);
+                $this->template->set('title', 'Débloquer un membre');
+
+                if(isset($_POST['confirm'])){
+                    $blocked_user = $user->getObject($blocked_user->id);
+                    $unblock = $blocked_user->unblock();
+                    if($unblock['in_error']){
+                        $this->template->set('errors', $unblock['errors']);
+                    }
+                    else {
+                        $this->template->set('success', true);
+                    }
+                }
+                break;
+
             default:
                 $this->template = $this->loadView('admin/users/main');
                 $this->template->set('title', 'Membres');

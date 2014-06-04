@@ -23,6 +23,9 @@ class Controller {
             $params = explode('/', $_GET['params']);
             if($this->mode == $this->config['admin_mode'] && isset($params[1])){
                 $this->action = $params[1];
+                if(isset($params[2])){
+                    $this->params = $params[2];
+                }
             }
             else {
                 $this->action = array_shift($params);

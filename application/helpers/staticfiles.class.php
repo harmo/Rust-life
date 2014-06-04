@@ -16,6 +16,10 @@ class StaticFiles {
         return $this->checkFile($filename, 'js', $type);
     }
 
+    public function img($filename){
+        return $this->checkFile($filename, null, 'images');
+    }
+
     private function checkFile($filename, $ext, $type){
         try {
             $file = 'static/'.$type.'/'.$filename.'.'.$ext;
