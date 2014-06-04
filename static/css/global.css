@@ -24,6 +24,9 @@ body {
     padding: 15px;
 }
 
+.footer {
+    margin-top: 15px;
+}
 .footer .container {
     background-color: rgba(28, 30, 34, 0.85);
     min-height: 50px;
