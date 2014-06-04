@@ -84,9 +84,9 @@
                 </tr>
 
                 <?php if($clan->owner['id'] == $user->id && !empty($clan->requires)): ?>
-                    <tr>
+                    <tr class="require-line">
                         <td colspan="5">
-                            <table class="table table-bordered require-line clan_<?php echo $clan->id; ?>">
+                            <table class="table table-bordered clan_<?php echo $clan->id; ?>">
                                 <tr>
                                     <th class="member">Membre</th>
                                     <th>Message</th>
