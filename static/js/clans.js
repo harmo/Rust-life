@@ -94,7 +94,7 @@ var Clan = {
     },
 
     seeRequires: function(clan_id){
-        $('table.clan_'+clan_id).toggle();
+        $('table.clan_'+clan_id).closest('.require-line').toggle();
     },
 
     acceptRequire: function(require_line){
