@@ -81,3 +81,16 @@ table.require-line td.actions {
 table.require-line td.member {
     width: 140px;
 }
+
+tr.user-header {
+    cursor: pointer;
+}
+tr.user-details {
+    display: none;
+}
+
+@media (max-width:990px) {
+    .logo {
+        font-size: 19px;
+    }
+}

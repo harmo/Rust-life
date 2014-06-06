@@ -116,6 +116,7 @@ class Users extends Controller {
         }
 
         $this->template->set('static', $this->staticFiles);
+        $this->template->addJs('users');
         $this->template->render();
     }
 
