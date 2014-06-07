@@ -31,11 +31,24 @@ class User extends Model {
         return $this;
     }
 
-    public function getAll(){
+    public function getAll($exclude_current=false){
         $users = array();
         foreach($this->selectAll('utilisateurs', '*', null, 'ORDER BY identifiant ASC') as $user){
-            $loaded_user = $this->loadUser($user);
-            $users[$loaded_user->id] = $loaded_user;
+            if(!$exclude_current || ($exclude_current && $user['id'] != $this->id)){
+                $loaded_user = $this->loadUser($user);
+                $users[$loaded_user->id] = $loaded_user;
+            }
+        }
+        return $users;
+    }
+
+    public function getAllWithoutClan($exclude_current=false){
+        $users = array();
+        foreach($this->selectAll('utilisateurs', '*', array('clan' => ''), 'ORDER BY identifiant ASC') as $user){
+            if(!$exclude_current || ($exclude_current && $user['id'] != $this->id)){
+                $loaded_user = $this->loadUser($user);
+                $users[$loaded_user->id] = $loaded_user;
+            }
         }
         return $users;
     }

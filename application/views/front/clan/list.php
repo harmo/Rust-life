@@ -5,13 +5,18 @@
 <?php if(sizeof($clans) == 0): ?>
     <div class="lead">Aucun clan</div>
 <?php else: ?>
+    <?php if($user->clan == ''): ?>
+        <a href="/<?php echo BASE_URL; ?>clans/add/" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus"> Créer un clan</span>
+        </a>
+    <?php endif; ?>
     <table class="table table-striped clans">
         <thead>
             <tr>
                 <th>Clan</th>
                 <th>Chef</th>
                 <th>Membres</th>
-                <th>Status</th>
+                <th>Statut</th>
                 <th class="text-center">Actions</th>
             </tr>
         </thead>
@@ -31,16 +36,26 @@
                     <td class="actions text-center">
                         <?php if($clan->mode == Clan::$PUBLIC): ?>
 
-                            <?php if($clan->id == $user->clan): ?>
-                                <a href="/<?php echo BASE_URL; ?>clans/unjoin/<?php echo $clan->id; ?>" title="Quitter ce clan" class="unjoin-clan">
-                                    <span class="glyphicon glyphicon-log-out"></span>
-                                </a>
+                            <?php if($clan->owner['id'] != $user->id): ?>
+
+                                <?php if($clan->id == $user->clan): ?>
+                                    <a href="/<?php echo BASE_URL; ?>clans/unjoin/<?php echo $clan->id; ?>" title="Quitter ce clan" class="unjoin-clan">
+                                        <span class="glyphicon glyphicon-log-out"></span>
+                                    </a>
+
+                                <?php else: ?>
+                                    <a href="/<?php echo BASE_URL; ?>clans/join/<?php echo $clan->id; ?>" title="Rejoindre ce clan" class="join-clan">
+                                        <span class="glyphicon glyphicon-log-in"></span>
+                                    </a>
+                                <?php endif; ?>
 
                             <?php else: ?>
-                                <a href="/<?php echo BASE_URL; ?>clans/join/<?php echo $clan->id; ?>" title="Rejoindre ce clan" class="join-clan">
-                                    <span class="glyphicon glyphicon-log-in"></span>
-                                </a>
 
+                                <?php if(sizeof($clan->members) > 1): ?>
+                                    <a href="/#" title="Changer de chef" class="change-owner" data-owner="<?php echo $clan->owner['id']; ?>" data-clan="<?php echo $clan->id; ?>"><span class="glyphicon glyphicon-user"></span></a>
+                                <?php endif; ?>
+
+                                <a href="/<?php echo BASE_URL; ?>clans/remove/<?php echo $clan->id; ?>" title="Supprimer le clan"><span class="glyphicon glyphicon-remove"></span></a>
                             <?php endif; ?>
 
                         <?php elseif($clan->mode == Clan::$ON_DEMAND): ?>
@@ -77,8 +92,11 @@
                             <?php endif; ?>
 
                         <?php elseif($clan->mode == Clan::$PRIVATE): ?>
-                            <span class="glyphicon glyphicon-lock" title="Ce clan ne recrute pas"></span>
-
+                            <?php if($clan->owner['id'] == $user->id): ?>
+                                <a href="/<?php echo BASE_URL; ?>clans/remove/<?php echo $clan->id; ?>" title="Supprimer le clan"><span class="glyphicon glyphicon-remove"></span></a>
+                            <?php else: ?>
+                                <span class="glyphicon glyphicon-lock" title="Ce clan ne recrute pas"></span>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </td>
                 </tr>

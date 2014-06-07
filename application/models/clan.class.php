@@ -69,7 +69,7 @@ class Clan extends Model {
     }
 
     public function create($post){
-        if($post['money'] == ''){
+        if(!isset($post['money']) || $post['money'] == ''){
             $post['money'] = 0;
         }
 
@@ -95,7 +95,7 @@ class Clan extends Model {
             $this->update('utilisateurs', $data, array('id' => $user['id']));
         }
 
-        return array('in_error' => false, 'success' => array('grade_id' => $clan_id));
+        return array('in_error' => false, 'success' => array('clan_id' => $clan_id));
     }
 
     public function updateData($post){

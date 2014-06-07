@@ -11,23 +11,19 @@ class Clans extends Controller {
             $this->redirect('login');
         }
 
-        $template = $this->loadView('front/clans');
-        $user = $this->loadModel('user');
-        $template->set('user', $user->get($user_id));
+        $template = $this->loadView('front/clan/list');
         $template->set('static', $this->staticFiles);
-        $template->addJs('alertify-0.3.11/js/alertify.min', 'vendor');
-        $template->addCss('alertify-0.3.11/css/alertify.core', 'vendor');
-        $template->addCss('alertify-0.3.11/css/alertify.default', 'vendor');
-        $template->addJs('clans');
+        $user = $this->loadModel('user');
+        $user_object = $user->getObject($user_id);
         $clan = $this->loadModel('clan');
 
         if(isset($this->params[0])){
             // URL calls
             switch ($this->action) {
                 case 'join':
-                    if($user->clan == ''){
+                    if($user_object->clan == ''){
                         $loaded_clan = $clan->getObject($this->params[0]);
-                        if(!$loaded_clan->addUser($user)){
+                        if(!$loaded_clan->addUser($user_object)){
                             $template->set('errors', 'Impossible de rejoindre ce clan');
                         }
                         else {
@@ -38,8 +34,8 @@ class Clans extends Controller {
 
                 case 'unjoin':
                     $loaded_clan = $clan->getObject($this->params[0]);
-                    if($user->clan != ''){
-                        if(!$loaded_clan->removeUser($user)){
+                    if($user_object->clan != ''){
+                        if(!$loaded_clan->removeUser($user_object)){
                             $template->set('errors', 'Impossible de rejoindre ce clan');
                         }
                         else {
@@ -50,11 +46,49 @@ class Clans extends Controller {
 
                 case 'cancel':
                     $loaded_clan = $clan->getObject($this->params[0]);
-                    if(!$loaded_clan->cancelInvitation($user)){
+                    if(!$loaded_clan->cancelInvitation($user_object)){
                         $template->set('errors', 'Impossible d\'annuler la demande');
                     }
                     else {
                         $this->redirect('clans');
+                    }
+                    break;
+
+                case 'remove':
+                    $loaded_clan = $clan->getObject($this->params[0]);
+                    if($loaded_clan->owner['id'] != $user_object->id){
+                        $this->redirect('clans');
+                    }
+
+                    $remove = $loaded_clan->remove();
+                    if($remove['in_error']){
+                        $template->set('errors', $remove['errors']);
+                    }
+                    else {
+                        $this->redirect('clans');
+                    }
+                    break;
+
+                case 'add':
+                    if($user_object->clan != ''){
+                        $this->redirect('clans');
+                    }
+
+                    $template = $this->loadView('front/clan/add');
+                    $template->set('static', $this->staticFiles);
+                    $template->addCss('select2-3.4.1/select2', 'vendor');
+                    $template->addJs('select2-3.4.1/select2.min', 'vendor');
+                    $template->set('users', $user_object->getAllWithoutClan(true));
+
+                    if(isset($_POST['add_clan'])){
+                        array_push($_POST['members'], $_POST['owner']);
+                        $create = $clan->create($_POST);
+                        if($create['in_error']){
+                            $template->set('errors', $create['errors']);
+                        }
+                        else {
+                            $template->set('success', $create['success']);
+                        }
                     }
                     break;
             }
@@ -97,10 +131,14 @@ class Clans extends Controller {
             }
         }
 
+        $template->addJs('alertify-0.3.11/js/alertify.min', 'vendor');
+        $template->addCss('alertify-0.3.11/css/alertify.core', 'vendor');
+        $template->addCss('alertify-0.3.11/css/alertify.default', 'vendor');
+        $template->addJs('clans');
         $template->set('title', 'Clans');
-
         $template->set('clan_modes', $clan->available_modes);
         $template->set('clans', $clan->getAll());
+        $template->set('user', $user->get($user_id));
 
 
         $template->render();
