@@ -4,13 +4,24 @@
     <li class="active">Liste des membres</li>
 </ol>
 
+<div class="well filters">
+    <form class="form-inline" role="form" method="post">
+        <div class="form-group">
+            <label class="control-label" for="search_user">Identifiant ou adresse e-mail</label>
+            <input type="text" class="form-control" id="search_user" name="search_user" value="<?php echo (isset($_POST['search_user']) ? $_POST['search_user'] : '') ?>">
+        </div>
+        <button type="submit" class="btn btn-success">Chercher</button>
+        <a href="/<?php echo BASE_URL.'admin/users/list/'; ?>" class="btn btn-warning">Réinitialiser</a>
+    </form>
+</div>
+
 <?php if(empty($users)): ?>
     <div class="wrapper-content">
         Aucun membre enregistré.
     </div>
 <?php else: ?>
     <div class="hidden-xs hidden-sm">
-        <table class="table table-striped">
+        <table class="table table-striped member-table tablesorter">
             <thead>
                 <tr>
                     <th>Identifiant</th>
@@ -19,7 +30,7 @@
                     <th>Points</th>
                     <th>Argent</th>
                     <th>Clan</th>
-                    <th>Dernière connexion</th>
+                    <th>Connexion</th>
                     <th>Dernière IP</th>
                     <th>Bloqué</th>
                     <th>Actions</th>
@@ -103,4 +114,26 @@
             </tbody>
         </table>
     </div>
+
+    <?php if(isset($total_pages) && $total_pages > 1): ?>
+        <ul class="pagination">
+            <?php if($current_page == 1): ?>
+                <li class="disabled"><a href="#">&laquo;</a></li>
+            <?php else: ?>
+                <li><a href="/<?php echo BASE_URL.'admin/users/list/'.($current_page-1) ?>">&laquo;</a></li>
+            <?php endif; ?>
+
+            <?php for($page=1; $page<=$total_pages; $page++): ?>
+                <li class="<?php echo $page == $current_page ? 'active' : '' ?>">
+                    <a href="/<?php echo BASE_URL.'admin/users/list/'.$page ?>"><?php echo $page ?></a>
+                </li>
+            <?php endfor; ?>
+
+            <?php if($current_page == $total_pages): ?>
+                <li class="disabled"><a href="#">&raquo;</a></li>
+            <?php else: ?>
+                <li><a href="/<?php echo BASE_URL.'admin/users/list/'.($current_page+1) ?>">&raquo;</a></li>
+            <?php endif; ?>
+        </ul>
+    <?php endif; ?>
 <?php endif; ?>

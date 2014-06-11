@@ -91,6 +91,12 @@ tr.user-header {
 tr.user-details {
     display: none;
 }
+table.member-table th {
+    font-size: 14px;
+}
+table.member-table td {
+    font-size: 12px;
+}
 
 
 @media (max-width:990px) {

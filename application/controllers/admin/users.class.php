@@ -2,11 +2,12 @@
 class Users extends Controller {
 
     private $template;
-    function __construct(){
+
+    public function __construct(){
         parent::__construct('admin');
     }
 
-    function index(){
+    public function index(){
         $user_id = $this->session->get('user');
         if(!$user_id){
             $this->redirect('login', 'admin/users');
@@ -23,7 +24,20 @@ class Users extends Controller {
             case 'list':
                 $this->template = $this->loadView('admin/users/list');
                 $this->template->set('title', 'Liste des membres');
-                $this->template->set('users', $user->getAll());
+
+                if(isset($_POST['search_user']) && $_POST['search_user'] != ''){
+                    $this->template->set('users', $user->search($_POST['search_user']));
+                }
+                else {
+                    $page = $this->params != '' && is_int((int)$this->params) ? (int)$this->params : 1;
+                    $this->template->set('current_page', $page);
+                    $this->template->set('users', $user->getAll(false, $page));
+                    $user_count = $user->countAll();
+                    $this->template->set('user_count', $user_count);
+                    $total_pages = ceil($user_count / $user->user_per_page);
+                    $this->template->set('total_pages', $total_pages);
+                }
+
                 $this->template->set('clans', $clan->getAll());
                 break;
 
@@ -116,6 +130,8 @@ class Users extends Controller {
         }
 
         $this->template->set('static', $this->staticFiles);
+        $this->template->addJs('tablesorter/jquery.tablesorter.min', 'vendor');
+        $this->template->addCss('tablesorter/style', 'vendor');
         $this->template->addJs('users');
         $this->template->render();
     }

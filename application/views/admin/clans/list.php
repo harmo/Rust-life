@@ -9,7 +9,7 @@
         Aucun clan enregistré.<br>
         <a class="btn btn-default" href="/<?php echo BASE_URL; ?>admin/clans/add">Ajouter</a>
     <?php else: ?>
-        <table class="table table-striped">
+        <table class="table table-striped clan-table">
             <thead>
                 <tr>
                     <th>Nom</th>

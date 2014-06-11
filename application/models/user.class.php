@@ -17,6 +17,7 @@ class User extends Model {
 
     private $default_money = 200;
     private $admin_grade = 10;
+    public $user_per_page = 20;
 
     public function isAdmin(){
         return $this->grade == $this->admin_grade;
@@ -31,13 +32,32 @@ class User extends Model {
         return $this;
     }
 
-    public function getAll($exclude_current=false){
+    public function getAll($exclude_current=false, $page=1){
         $users = array();
-        foreach($this->selectAll('utilisateurs', '*', null, 'ORDER BY identifiant ASC') as $user){
+        $params = 'ORDER BY identifiant ASC LIMIT '.$this->user_per_page;
+        if($page > 1){
+            $params .= ' OFFSET '.($page-1)*$this->user_per_page;
+        }
+        foreach($this->selectAll('utilisateurs', '*', null, $params) as $user){
             if(!$exclude_current || ($exclude_current && $user['id'] != $this->id)){
                 $loaded_user = $this->loadUser($user);
                 $users[$loaded_user->id] = $loaded_user;
             }
+        }
+        return $users;
+    }
+
+    public function countAll(){
+        return sizeof($this->selectAll('utilisateurs', 'id'));
+    }
+
+    public function search($data, $page=1){
+        $users = array();
+        $params = 'identifiant LIKE "%'.$data.'%" OR email LIKE "%'.$data.'%" ORDER BY identifiant ASC';
+        $users_results = $this->selectAll('utilisateurs', '*', array(), $params);
+         foreach($users_results as $user){
+            $loaded_user = $this->loadUser($user);
+            $users[$loaded_user->id] = $loaded_user;
         }
         return $users;
     }

@@ -1,5 +1,11 @@
 jQuery(document).ready(function($){
 
+    $('.clan-table').tablesorter({
+        headers: {
+            5: {sorter: false}
+        }
+    });
+
     if($('#members').length > 0){
         $('#members').select2({
             placeholder: 'Choisir un ou plusieurs membres'

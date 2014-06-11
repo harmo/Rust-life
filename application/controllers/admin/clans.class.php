@@ -24,6 +24,10 @@ class Clans extends Controller {
                 $this->template = $this->loadView('admin/clans/list');
                 $this->template->set('title', 'Liste des clans');
                 $this->template->set('clans', $clan->getAll());
+                $this->template->set('static', $this->staticFiles);
+                $this->template->addJs('tablesorter/jquery.tablesorter.min', 'vendor');
+                $this->template->addCss('tablesorter/style', 'vendor');
+                $this->template->addJs('clans');
                 break;
 
             case 'add':
