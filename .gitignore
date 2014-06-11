@@ -1,2 +1,2 @@
 /application/config.php
-*.sql
+#*.sql
