@@ -64,7 +64,7 @@ class Model {
         $fields = !is_array($fields) ? array($fields) : $fields;
         $fields = implode(', ', $fields);
         $where_query = '';
-        if($where != null){
+        if($where != null || is_array($where)){
             $where_query .= ' WHERE ';
             $i = 1;
             foreach($where as $field => $value){
@@ -77,7 +77,7 @@ class Model {
         }
         $query = 'SELECT '.$fields.' FROM '.$table.$where_query.' '.$other;
         $this->query($query);
-        if($where != null){
+        if($where != null && !empty($where)){
             foreach($where as $field => $value){
                 $this->bind(':'.strtolower($field), $value);
             }
