@@ -1,0 +1,16 @@
+.headerSortUp {
+    background-image: url(asc.gif) !important;
+    background-repeat: no-repeat !important;
+}
+.headerSortDown {
+    background-image: url(desc.gif) !important;
+    background-repeat: no-repeat !important;
+}
+th.header {
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center right;
+    background-image: url(bg.gif);
+    padding-left: 0px !important;
+    margin-left: -1px;
+}
