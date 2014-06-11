@@ -62,6 +62,16 @@ jQuery(document).ready(function($){
         Clan.changeOwner($(this));
     });
 
+    $('.remove-clan').click(function(e){
+        e.preventDefault();
+        var link = $(this).attr('href');
+        alertify.confirm('Voulez-vous supprimer votre clan ?', function(clicked_ok){
+            if(clicked_ok){
+                window.location.href = link;
+            }
+        });
+    });
+
 });
 
 

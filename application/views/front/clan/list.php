@@ -55,7 +55,7 @@
                                     <a href="/#" title="Changer de chef" class="change-owner" data-owner="<?php echo $clan->owner['id']; ?>" data-clan="<?php echo $clan->id; ?>"><span class="glyphicon glyphicon-user"></span></a>
                                 <?php endif; ?>
 
-                                <a href="/<?php echo BASE_URL; ?>clans/remove/<?php echo $clan->id; ?>" title="Supprimer le clan"><span class="glyphicon glyphicon-remove"></span></a>
+                                <a href="/<?php echo BASE_URL; ?>clans/remove/<?php echo $clan->id; ?>" title="Supprimer le clan" class="remove-clan"><span class="glyphicon glyphicon-remove"></span></a>
                             <?php endif; ?>
 
                         <?php elseif($clan->mode == Clan::$ON_DEMAND): ?>
@@ -76,6 +76,7 @@
                                 <?php if(!empty($clan->requires)): ?>
                                     <a href="#" class="new-requires" data-clan="<?php echo $clan->id; ?>" title="<?php echo sizeof($clan->requires); ?> Nouvelle(s) demande(s)"><span class="glyphicon glyphicon-exclamation-sign"></span></a>
                                 <?php endif; ?>
+                                <a href="/<?php echo BASE_URL; ?>clans/remove/<?php echo $clan->id; ?>" title="Supprimer le clan" class="remove-clan"><span class="glyphicon glyphicon-remove"></span></a>
 
                             <?php endif; ?>
 
@@ -93,7 +94,7 @@
 
                         <?php elseif($clan->mode == Clan::$PRIVATE): ?>
                             <?php if($clan->owner['id'] == $user->id): ?>
-                                <a href="/<?php echo BASE_URL; ?>clans/remove/<?php echo $clan->id; ?>" title="Supprimer le clan"><span class="glyphicon glyphicon-remove"></span></a>
+                                <a href="/<?php echo BASE_URL; ?>clans/remove/<?php echo $clan->id; ?>" title="Supprimer le clan" class="remove-clan"><span class="glyphicon glyphicon-remove"></span></a>
                             <?php else: ?>
                                 <span class="glyphicon glyphicon-lock" title="Ce clan ne recrute pas"></span>
                             <?php endif; ?>

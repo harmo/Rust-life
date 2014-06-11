@@ -98,3 +98,7 @@ tr.user-details {
         font-size: 19px;
     }
 }
+
+.alertify-message {
+    color: #000000;
+}

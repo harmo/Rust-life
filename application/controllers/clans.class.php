@@ -81,6 +81,7 @@ class Clans extends Controller {
                     $template->set('users', $user_object->getAllWithoutClan(true));
 
                     if(isset($_POST['add_clan'])){
+                        $_POST['members'] = isset($_POST['members']) ? $_POST['members'] : array();
                         array_push($_POST['members'], $_POST['owner']);
                         $create = $clan->create($_POST);
                         if($create['in_error']){
