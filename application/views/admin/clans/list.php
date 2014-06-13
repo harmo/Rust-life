@@ -30,7 +30,7 @@
                         <td>
                             <ul class="list-unstyled">
                                 <?php foreach($clan->members as $member): ?>
-                                    <li><?php echo $member; ?></li>
+                                    <li><?php echo $member['login']; ?></li>
                                 <?php endforeach; ?>
                             </ul>
                         </td>

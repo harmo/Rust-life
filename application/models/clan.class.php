@@ -1,11 +1,11 @@
 <?php
 class Clan extends Model {
 
-    private $id;
-    private $name;
-    private $mode;
-    private $money;
-    private $members;
+    public $id;
+    public $name;
+    public $mode;
+    public $money;
+    public $members;
     private $requires;
     public $owner;
 
@@ -46,7 +46,7 @@ class Clan extends Model {
         $loaded_members = array();
         $members = $this->selectAll('utilisateurs', '*', array('clan' => $this->id));
         foreach($members as $member){
-            $loaded_members[$member['id']] = $member['identifiant'];
+            $loaded_members[$member['id']] = array('login' => $member['identifiant'], 'grade' => $member['rang']);
             if($member['id'] == $clan['owner']){
                 $loaded_clan->owner = $this->owner  = $member;
             }

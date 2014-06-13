@@ -34,12 +34,16 @@ class User extends Model {
 
     public function getAll($exclude_current=false, $page=1){
         $users = array();
-        $params = 'ORDER BY identifiant ASC LIMIT '.$this->user_per_page;
+        $params = 'ORDER BY identifiant ASC';
+        if($page > 0){
+            $params .= ' LIMIT '.$this->user_per_page;
+        }
         if($page > 1){
             $params .= ' OFFSET '.($page-1)*$this->user_per_page;
         }
+        $me = $this;
         foreach($this->selectAll('utilisateurs', '*', null, $params) as $user){
-            if(!$exclude_current || ($exclude_current && $user['id'] != $this->id)){
+            if(!$exclude_current || ($exclude_current && $user['id'] != $me->id)){
                 $loaded_user = $this->loadUser($user);
                 $users[$loaded_user->id] = $loaded_user;
             }

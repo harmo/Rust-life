@@ -92,6 +92,20 @@ class Clans extends Controller {
                         }
                     }
                     break;
+
+                case 'edit':
+                    $loaded_clan = $clan->getObject($this->params[0]);
+                    if($loaded_clan->owner['id'] != $user_object->id){
+                        $this->redirect('clans');
+                    }
+
+                    $template = $this->loadView('front/clan/edit');
+                    $template->set('static', $this->staticFiles);
+                    $template->addCss('select2-3.4.1/select2', 'vendor');
+                    $template->addJs('select2-3.4.1/select2.min', 'vendor');
+                    $template->set('users', $user_object->getAll(true, 0));
+                    $template->set('clan', $loaded_clan);
+                    break;
             }
         }
         else {

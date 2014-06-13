@@ -38,7 +38,7 @@ class Clans extends Controller {
                 $this->template->addJs('clans');
                 $this->template->set('title', 'Ajouter un clan');
 
-                $this->template->set('users', $user->getAll());
+                $this->template->set('users', $user->getAll(false, 0));
 
                 if(isset($_POST['add_clan'])){
                     $create = $clan->create($_POST);
@@ -61,7 +61,7 @@ class Clans extends Controller {
                 $this->template->set('title', 'Éditer un clan');
 
                 if(isset($_GET['id'])){
-                    $this->template->set('users', $user->getAll());
+                    $this->template->set('users', $user->getAll(false, 0));
                     $this->template->set('clan_to_update', $clan->get($_GET['id']));
                 }
                 if(isset($_POST['update_clan'])){

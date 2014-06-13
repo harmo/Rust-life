@@ -1,10 +1,12 @@
 jQuery(document).ready(function($){
 
-    $('.clan-table').tablesorter({
-        headers: {
-            5: {sorter: false}
-        }
-    });
+    if($('.clan-table').length > 0){
+        $('.clan-table').tablesorter({
+            headers: {
+                5: {sorter: false}
+            }
+        });
+    }
 
     if($('#members').length > 0){
         $('#members').select2({

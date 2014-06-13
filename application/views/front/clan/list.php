@@ -29,7 +29,7 @@
                     <td class="members">
                         <ul class="list-unstyled">
                             <?php foreach($clan->members as $id => $member): ?>
-                                <li data-id="<?php echo $id; ?>"><?php echo $member; ?></li>
+                                <li data-id="<?php echo $id; ?>"><?php echo $member['login']; ?></li>
                             <?php endforeach; ?>
                         </ul>
                     </td>
