@@ -6,7 +6,7 @@
     <title><?php echo $title; ?></title>
     <?php include 'css.tpl.php'; ?>
 </head>
-<body>
+<body <?php echo !DEV ? 'class="prod"' : ''; ?>>
     <?php include 'navbar.tpl.php' ?>
 
     <div class="wrapper-content container">
