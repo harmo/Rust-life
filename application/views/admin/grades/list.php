@@ -11,6 +11,7 @@
             <thead>
                 <tr>
                     <th>Nom</th>
+                    <th>Type</th>
                     <th>Permissions</th>
                     <th>Actions</th>
                 </tr>
@@ -19,6 +20,7 @@
                 <?php foreach($grades as $grade): ?>
                     <tr>
                         <td><?php echo $grade->name; ?></td>
+                        <td><?php echo $grade_types[$grade->type]; ?></td>
                         <td>
                             <ul>
                                 <?php foreach($grade->permissions as $perm): ?>

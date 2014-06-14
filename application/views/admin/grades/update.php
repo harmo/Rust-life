@@ -32,7 +32,18 @@
                 </div>
             </div>
 
-            <div class="form-group <?php echo (isset($errors) && isset($errors['namedescription']) ? 'has-error' : '') ?>">
+            <div class="form-group <?php echo (isset($errors) && isset($errors['type']) ? 'has-error' : '') ?>">
+                <label for="type" class="col-sm-2 control-label">Type de rang</label>
+                <div class="col-sm-3">
+                    <select class="form-control" name="type">
+                        <?php foreach($grade_types as $key => $type): ?>
+                            <option value="<?php echo $key; ?>" <?php echo $grade_to_update->type == $key ? 'selected="selected"' : '' ?>><?php echo $type; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group <?php echo (isset($errors) && isset($errors['description']) ? 'has-error' : '') ?>">
                 <label for="description" class="col-sm-2 control-label">Description</label>
                 <div class="col-sm-3">
                     <textarea name="description" class="form-control" id="description"><?php echo $grade_to_update->description; ?></textarea>

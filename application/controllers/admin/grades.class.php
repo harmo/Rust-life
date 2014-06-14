@@ -106,6 +106,7 @@ class Grades extends Controller {
         }
 
         $this->template->set('static', $this->staticFiles);
+        $this->template->set('grade_types', $grade->grade_types);
         $this->template->render();
     }
 
