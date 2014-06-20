@@ -47,6 +47,11 @@ body {
     min-width: 262px !important;
 }
 
+.panel-primary>.panel-heading {
+	
+	background-color: #579440;
+}
+
 /**
  * CLANS
  */
