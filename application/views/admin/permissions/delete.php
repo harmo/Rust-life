@@ -1,6 +1,7 @@
 <ol class="breadcrumb">
     <li><a href="/<?php echo BASE_URL ?>admin">Tableau de bord</a></li>
-    <li><a href="/<?php echo BASE_URL ?>admin/users">Administration des permissions</a></li>
+    <li><a href="/<?php echo BASE_URL ?>admin/permissions">Administration des permissions</a></li>
+    <li><a href="/<?php echo BASE_URL ?>admin/permissions/list">Liste des permissions</a></li>
     <li class="active">Supprimer une permission</li>
 </ol>
 

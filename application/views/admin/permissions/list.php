@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
     <li><a href="/<?php echo BASE_URL ?>admin">Tableau de bord</a></li>
-    <li><a href="/<?php echo BASE_URL ?>admin/users">Administration des permissions</a></li>
+    <li><a href="/<?php echo BASE_URL ?>admin/permissions">Administration des permissions</a></li>
     <li class="active">Liste des permissions</li>
 </ol>
 
@@ -23,8 +23,8 @@
 
                         <td><?php echo $permission->description; ?></td>
                         <td>
-                            <a class="action-link" href="update?id=<?php echo $permission->id; ?>"><span class="glyphicon glyphicon-pencil"></span></a>
-                            <a class="action-link" href="delete?id=<?php echo $permission->id; ?>"><span class="glyphicon glyphicon-remove"></span></a>
+                            <a class="action-link" href="update/<?php echo $permission->id; ?>"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a class="action-link" href="delete/<?php echo $permission->id; ?>"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

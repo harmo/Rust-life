@@ -13,8 +13,8 @@
         <a href="#" class="new-requires" data-clan="<?php echo $clan->id; ?>" title="<?php echo sizeof($clan->requires); ?> Nouvelle(s) demande(s)">
             <span class="glyphicon glyphicon-exclamation-sign"></span></a>
     <?php endif; ?>
-    <!--<a href="/<?php echo BASE_URL; ?>clans/edit/<?php echo $clan->id; ?>" title="Éditer le clan" class="edit-clan">
-        <span class="glyphicon glyphicon-cog"></span></a>-->
+    <a href="/<?php echo BASE_URL; ?>clans/edit/<?php echo $clan->id; ?>" title="Éditer le clan" class="edit-clan">
+        <span class="glyphicon glyphicon-cog"></span></a>
     <a href="/<?php echo BASE_URL; ?>clans/remove/<?php echo $clan->id; ?>" title="Supprimer le clan" class="remove-clan">
         <span class="glyphicon glyphicon-remove"></span></a>
 

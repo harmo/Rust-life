@@ -8,6 +8,7 @@ class Clan extends Model {
     public $members;
     private $requires;
     public $owner;
+    public $grades;
 
     public $available_modes = array(
         1 => 'Privé',
@@ -64,8 +65,17 @@ class Clan extends Model {
         }
         $loaded_clan->requires = $this->requires = $loaded_requires;
 
+        $loaded_grades = array();
+        $grades = $this->selectAll('clan_grade', '*', array('id_clan' => $this->id));
+        foreach($grades as $grade){
+            $perms = array_column($this->selectAll('grade_permission', 'id_permission', array('id_grade' => $grade['id_grade'])), 'id_permission');
+            $loaded_grades[$grade['id']] = $this->selectOne('grade', '*', array('id' => $grade['id_grade']));
+            $permission_class = new Permission();
+            $loaded_grades[$grade['id']]['permissions'] = $permission_class->getMultiple(array_values($perms));
+        }
+        $loaded_clan->grades = $this->grades = $loaded_grades;
 
-        return$loaded_clan;
+        return $loaded_clan;
     }
 
     public function create($post){
@@ -117,6 +127,8 @@ class Clan extends Model {
         if(!$this->update('clan', $data, array('id' => $post['clan_id']))){
             return array('in_error' => true, 'errors' => array('Mise à jour du clan impossible'));
         }
+
+        $user_class = new User();
 
         foreach($post['members'] as $member_id){
             $user = $this->selectOne('user', '*', array('id' => (int)$member_id));
@@ -231,5 +243,36 @@ class Clan extends Model {
             return array('in_error' => true, 'errors' => array('Impossible de changer de chef'));
         }
         return array('in_error' => false);
+    }
+
+    public function addGrade($post){
+        $grade_class = new Grade();
+        $post['type'] = 2;
+        $created = $grade_class->create($post);
+        if($created['in_error']){
+            return $created;
+        }
+        $clan_grade = $this->insertOne('clan_grade', array('id_clan' => (int)$post['clan_id'], 'id_grade' => (int)$created['success']['grade_id']));
+        if(!$clan_grade){
+            return array('in_error' => true, 'message' => 'Impossible de créer le grade.');
+        }
+
+        $perms = array_column($this->selectAll('grade_permission', 'id_permission', array('id_grade' => $created['success']['grade_id'])), 'id_permission');
+        $permission_class = new Permission();
+
+        return array(
+            'in_error' => false,
+            'id_clan_grade' => $clan_grade,
+            'id_grade' => $created['success']['grade_id'],
+            'name' => $post['name'],
+            'description' => $post['description'],
+            'permissions' => $permission_class->getMultiple(array_values($perms))
+        );
+    }
+
+    public function removeGrade($post){
+        $grade_class = new Grade();
+        $grade = $grade_class->getObject($post['id_grade']);
+        return $grade->remove();
     }
 }

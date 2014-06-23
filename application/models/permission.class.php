@@ -5,13 +5,34 @@ class Permission extends Model {
     private $slug;
     private $description;
 
+    private $permissions_for_clan = array(12, 13, 14, 16, 17, 18, 19, 20, 21, 23);
+
     public function get($id){
         return $this->loadPerm($this->selectOne('permission', '*', array('id' => (int)$id)));
+    }
+
+    public function getMultiple($ids){
+        $selected_permissions = array();
+        $permissions = $this->selectAll('permission', '*', null, 'WHERE id IN ('.implode(', ', $ids).')');
+        foreach($permissions as $permission){
+            $perm = $this->loadPerm($permission);
+            $selected_permissions[$perm->id] = $perm;
+        }
+        return $selected_permissions;
     }
 
     public function getAll(){
         $permissions = array();
         foreach($this->selectAll('permission', '*') as $perm){
+            $loaded_perm = $this->loadPerm($perm);
+            $permissions[$loaded_perm->id] = $loaded_perm;
+        }
+        return $permissions;
+    }
+
+    public function getAllForClanOwner(){
+        $permissions = array();
+        foreach($this->selectAll('permission', '*', null, 'WHERE id IN ('.implode(', ', $this->permissions_for_clan).')') as $perm){
             $loaded_perm = $this->loadPerm($perm);
             $permissions[$loaded_perm->id] = $loaded_perm;
         }

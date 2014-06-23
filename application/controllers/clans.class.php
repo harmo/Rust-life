@@ -16,6 +16,8 @@ class Clans extends Controller {
         $user = $this->loadModel('user');
         $user_object = $user->getObject($user_id);
         $clan = $this->loadModel('clan');
+        $grade = $this->loadModel('grade');
+        $permission = $this->loadModel('permission');
 
         if(isset($this->params[0])){
             // URL calls
@@ -105,6 +107,18 @@ class Clans extends Controller {
                     $template->addJs('select2-3.4.1/select2.min', 'vendor');
                     $template->set('users', $user_object->getAll(true, 0));
                     $template->set('clan', $loaded_clan);
+                    $template->set('permissions', $permission->getAllForClanOwner());
+
+                    if(isset($_POST['submit_edit_grade'])){
+                        $_POST['type'] = 2;
+                        $update = $grade->updateData($_POST);
+                        if($update['in_error']){
+                            $template->set('errors', $update['errors']);
+                        }
+                        else {
+                            $template->set('success', true);
+                        }
+                    }
                     break;
             }
         }
@@ -141,6 +155,20 @@ class Clans extends Controller {
                     if($user->id == $loaded_clan->owner['id']){
                         $loaded_user = $user->get($_POST['user']);
                         die(json_encode($loaded_clan->changeOwner($loaded_user)));
+                    }
+                    break;
+
+                case 'add_grade':
+                    $loaded_clan = $clan->getObject($_POST['clan_id']);
+                    if($user->id == $loaded_clan->owner['id']){
+                        die(json_encode($loaded_clan->addGrade($_POST)));
+                    }
+                    break;
+
+                case 'delete_grade':
+                    $loaded_clan = $clan->getObject($_POST['clan_id']);
+                    if($user->id == $loaded_clan->owner['id']){
+                        die(json_encode($loaded_clan->removeGrade($_POST)));
                     }
                     break;
             }

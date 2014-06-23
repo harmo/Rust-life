@@ -1,6 +1,7 @@
 <ol class="breadcrumb">
     <li><a href="/<?php echo BASE_URL ?>admin">Tableau de bord</a></li>
     <li><a href="/<?php echo BASE_URL ?>admin/grades">Administration des rangs</a></li>
+    <li><a href="/<?php echo BASE_URL ?>admin/grades/list">Liste des rangs</a></li>
     <li class="active">Éditer un rang</li>
 </ol>
 

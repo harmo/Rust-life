@@ -46,8 +46,8 @@ class Permissions extends Controller {
                 $this->template = $this->loadView('admin/permissions/update');
                 $this->template->set('static', $this->staticFiles);
                 $this->template->set('title', 'Éditer une permission');
-                if(isset($params['id'])){
-                    $this->template->set('permission_to_update', $permission->get($params['id']));
+                if(isset($this->params)){
+                    $this->template->set('permission_to_update', $permission->get($this->params));
                 }
                 if(isset($_POST['update_perm'])){
                     $update = $permission->updateData($_POST);
@@ -62,13 +62,13 @@ class Permissions extends Controller {
 
             case 'delete':
                 try {
-                    if(!isset($params['id'])){
+                    if(!isset($this->params)){
                         throw new Exception('Unable to find permission id in GET parameters');
                     }
                     else {
                         $this->template = $this->loadView('admin/permissions/delete');
                         $this->template->set('title', 'Supprimer une permission');
-                        $this->template->set('permission', $permission->get($params['id']));
+                        $this->template->set('permission', $permission->get($this->params));
                         if(isset($_POST['confirm'])){
                             $delete = $permission->remove();
                             if(isset($delete['in_error']) && $delete['in_error']){

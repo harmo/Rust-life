@@ -28,8 +28,8 @@
                                 <?php endforeach; ?>
                             </ul>
                         <td>
-                            <a class="action-link" href="update?id=<?php echo $grade->id; ?>"><span class="glyphicon glyphicon-pencil"></span></a>
-                            <a class="action-link" href="delete?id=<?php echo $grade->id; ?>"><span class="glyphicon glyphicon-remove"></span></a>
+                            <a class="action-link" href="update/<?php echo $grade->id; ?>"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a class="action-link" href="delete/<?php echo $grade->id; ?>"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

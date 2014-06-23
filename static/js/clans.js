@@ -80,6 +80,25 @@ jQuery(document).ready(function($){
         });
     });
 
+    $('.edit-clan').on('click', '.grade-create-link', function(e){
+        e.preventDefault();
+        Clan.createGrade($(this).data('clan-id'));
+    });
+
+    $('.edit-clan').on('click', '.edit-grade', function(e){
+        e.preventDefault();
+        Clan.editGrade($(this).closest('tr.clan-grade').next('tr.edit-grade-line'));
+    });
+
+    $('.edit-clan').on('click', '.delete-grade', function(e){
+        e.preventDefault();
+        Clan.deleteGrade($(this).closest('tr.clan-grade').data('id-grade'), $(this).data('clan-id'));
+    });
+
+    if($('.edit-clan').find('tr.clan-grade').length > 0){
+        $('table.clan-grades').show();
+    }
+
 });
 
 
@@ -198,5 +217,81 @@ var Clan = {
                 }
             }
         })
+    },
+
+    createGrade: function(clan_id){
+        var template = $('.create-grade-template').clone();
+        template.find('form').addClass('create-grade-form');
+        alertify.confirm(template.html(), function(clicked_ok){
+            if(clicked_ok){
+                var name = $('.create-grade-form').find('input[name="clan_name"]').val();
+                var description = $('.create-grade-form').find('textarea').val();
+                var permissions = $('.create-grade-form').find('select[name="perms[]"]').val();
+
+                errors = [];
+                if(name == ''){
+                    errors.push('Veuillez indiquer le nom du rang.');
+                }
+                else if(description == ''){
+                    errors.push('Veuillez fournir une description.');
+                }
+                else if(permissions == null){
+                    errors.push('Sélectionnez au moins une permission.');
+                }
+
+                if(errors.length > 0){
+                    alertify.error(errors.join('<br>'));
+                    Clan.createGrade(clan_id);
+                }
+                else {
+                    $.ajax({
+                        url: BASE_URL+'clans/add_grade',
+                        method: 'post',
+                        data: {clan_id: clan_id, name: name, description: description, perms: permissions},
+                        dataType: 'json',
+                        success: function(response){
+                            if(response.in_error){
+                                alertify.error(response.message);
+                            }
+                            else {
+                                alertify.success('Rang ajouté avec succès.');
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    },
+    editing: null,
+    editGrade: function(grade_line){
+        if(Clan.editing != null){
+            $(Clan.editing).hide();
+        }
+        grade_line.show();
+        Clan.editing = grade_line;
+    },
+    deleteGrade: function(id_grade, clan_id){
+        alertify.confirm('Êtes-vous sûr de vouloir supprimer ce rang ?', function(clicked_ok){
+            if(clicked_ok){
+                $.ajax({
+                    url: BASE_URL+'clans/delete_grade',
+                    method: 'post',
+                    data: {id_grade: id_grade, clan_id: clan_id},
+                    dataType: 'json',
+                    success: function(response){
+                        if(response.in_error){
+                            alertify.error(response.message);
+                        }
+                        else {
+                            line = $('tr.clan-grade[data-id-grade="'+id_grade+'"]');
+                            line.next('tr.edit-grade-line').remove();
+                            line.remove();
+                            alertify.success('Rang supprimé avec succès.');
+                        }
+                    }
+                });
+            }
+        });
     }
 }

@@ -57,8 +57,8 @@ class Grades extends Controller {
                 $this->template->addCss('select2-3.4.1/select2', 'vendor');
                 $this->template->addJs('select2-3.4.1/select2.min', 'vendor');
                 $this->template->addJs('grades');
-                if(isset($_GET['id'])){
-                    $this->template->set('grade_to_update', $grade->get($_GET['id']));
+                if(isset($this->params)){
+                    $this->template->set('grade_to_update', $grade->get($this->params));
                 }
                 if(isset($_POST['update_grade'])){
                     $update = $grade->updateData($_POST);
@@ -73,13 +73,13 @@ class Grades extends Controller {
 
             case 'delete':
                 try {
-                    if(!isset($_GET['id'])){
+                    if(!isset($this->params)){
                         throw new Exception('Unable to find grade id in GET parameters');
                     }
                     else {
                         $this->template = $this->loadView('admin/grades/delete');
                         $this->template->set('title', 'Supprimer un rang');
-                        $this->template->set('grade', $grade->get($_GET['id']));
+                        $this->template->set('grade', $grade->get($this->params));
                         if(isset($_POST['confirm'])){
                             $delete = $grade->remove();
                             if(isset($delete['in_error']) && $delete['in_error']){

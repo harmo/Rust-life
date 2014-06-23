@@ -16,6 +16,11 @@ class Grade extends Model {
         return $this->loadGrade($this->selectOne('grade', '*', array('id' => (int)$id)));
     }
 
+    public function getObject($id){
+        $this->get($id);
+        return $this;
+    }
+
     public function getAll(){
         $grades = array();
         foreach($this->selectAll('grade', '*') as $grade){
@@ -53,15 +58,16 @@ class Grade extends Model {
         $data = array(
             'name' => $post['name'],
             'description' => $post['description'],
-            'type' => $post['type'],
-            'permissions' => json_encode($post['perms'])
+            'type' => $post['type']
         );
-        $grade_id = $this->insertOne('grade', $data);
-        if(!$grade_id){
+        $this->id = $this->insertOne('grade', $data);
+        if(!$this->id){
             return array('in_error' => true, 'errors' => array('Enregistrement de la permission impossible'));
         }
 
-        return array('in_error' => false, 'success' => array('grade_id' => $grade_id));
+        $this->updatePermissions($post['perms']);
+
+        return array('in_error' => false, 'success' => array('grade_id' => $this->id));
     }
 
     public function updateData($post){
@@ -87,12 +93,14 @@ class Grade extends Model {
     private function updatePermissions($posted_permissions){
         $perms_to_add = array();
         $perms_to_remove = array();
-        foreach($this->permissions as $id => $perm){
-            if(!in_array($id, $posted_permissions)){
-                array_push($perms_to_remove, $id);
-            }
-            else {
-                array_push($perms_to_add, array('id_grade' => (int)$this->id, 'id_permission' => (int)$id));
+        if(is_array($this->permissions)){
+            foreach($this->permissions as $id => $perm){
+                if(!in_array($id, $posted_permissions)){
+                    array_push($perms_to_remove, $id);
+                }
+                else {
+                    array_push($perms_to_add, array('id_grade' => (int)$this->id, 'id_permission' => (int)$id));
+                }
             }
         }
         foreach($posted_permissions as $permission_id){
@@ -111,6 +119,21 @@ class Grade extends Model {
     }
 
     public function remove(){
+        if(is_array($this->permissions)){
+            foreach($this->permissions as $id => $perm){
+                $this->delete('grade_permission', array('id_grade' => (int)$this->id, 'id_permission' => (int)$id));
+            }
+        }
+
+        $this->delete('clan_grade', array('id_grade' => (int)$this->id));
+
+        $user_class = new User();
+        foreach($this->selectAll('user', '*', null, 'WHERE site_grade='.(int)$this->id.' OR clan_grade='.(int)$this->id) as $user){
+            $user['site_grade'] = $user['site_grade'] != null && $user['site_grade'] == (int)$this->id ? null : $user['site_grade'];
+            $user['clan_grade'] = $user['clan_grade'] != null && $user['clan_grade'] == (int)$this->id ? null : $user['clan_grade'];
+            $user_class->updateData($user);
+        }
+
         if(!$this->delete('grade', array('id' => $this->id))){
             return array('in_error' => true, 'errors' => array('Suppression du rang impossible'));
         }
