@@ -118,8 +118,7 @@
 
         <div class="form-group">
             <label for="members" class="col-sm-2 control-label">Membres</label>
-            <!--<div class="col-sm-10">
-                <?php var_dump($clan->members); ?>
+            <div class="col-sm-10">
                 <table class="table table-striped">
                     <thead>
                         <th>Identifiant</th>
@@ -130,13 +129,13 @@
                         <?php foreach($clan->members as $id => $member): ?>
                             <tr>
                                 <td><?php echo $member['login']; ?></td>
-                                <td><?php //echo $member['grade']; ?></td>
+                                <td><?php echo $member['grade']->name; ?></td>
                                 <td></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-            </div>-->
+            </div>
         </div>
 
         <div class="form-group">

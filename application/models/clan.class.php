@@ -19,6 +19,9 @@ class Clan extends Model {
     public static $PUBLIC = 2;
     public static $ON_DEMAND = 3;
 
+    public $clan_chief_grade = 11;
+    public $clan_member_grade = 12;
+
     public function get($id){
         return $this->loadClan($this->selectOne('clan', '*', array('id' => (int)$id)));
     }
@@ -47,7 +50,15 @@ class Clan extends Model {
         $loaded_members = array();
         $members = $this->selectAll('user', '*', array('clan' => $this->id));
         foreach($members as $member){
-            $loaded_members[$member['id']] = array('login' => $member['login']/*, 'grade' => $member['rang']*/);
+            $grade = false;
+            if($member['clan_grade'] != null){
+                $grade_class = new Grade();
+                $grade = $grade_class->get((int)$member['clan_grade']);
+            }
+            $loaded_members[$member['id']] = array(
+                'login' => $member['login'],
+                'grade' => $grade
+            );
             if($member['id'] == $clan['owner']){
                 $loaded_clan->owner = $this->owner  = $member;
             }
@@ -99,9 +110,18 @@ class Clan extends Model {
             return array('in_error' => true, 'errors' => array('Enregistrement du clan impossible'));
         }
 
+        $clan_grades = array(
+            array('id_clan' => $clan_id, 'id_grade' => $this->clan_chief_grade),
+            array('id_clan' => $clan_id, 'id_grade' => $this->clan_member_grade)
+        );
+        $this->insertMultiple('clan_grade', $clan_grades);
+
         foreach($post['members'] as $member_id){
             $user = $this->selectOne('user', '*', array('id' => (int)$member_id));
-            $data = array('clan' => $clan_id);
+            $data = array(
+                'clan' => $clan_id,
+                'clan_grade' => ($user['id'] == $post['owner']) ? $this->clan_chief_grade : $this->clan_member_grade
+            );
             $this->update('user', $data, array('id' => $user['id']));
         }
 
@@ -144,6 +164,7 @@ class Clan extends Model {
 
     public function remove(){
         $this->unsetUsersIn($this->members);
+        $this->removeClanGrades();
         if(!$this->delete('clan', array('id' => $this->id))){
             return array('in_error' => true, 'errors' => array('Suppression du clan impossible'));
         }
@@ -162,6 +183,10 @@ class Clan extends Model {
         foreach($data as $id => $user){
             $this->update('user', array('clan' => 'NULL'), array('id' => $id));
         }
+    }
+
+    private function removeClanGrades(){
+        $this->delete('clan_grade', array('id_clan' => $this->id));
     }
 
     private function checkData($data){

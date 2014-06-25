@@ -18,6 +18,8 @@ class Clans extends Controller {
         }
 
         $clan = $this->loadModel('clan');
+        $permission = $this->loadModel('permission');
+        $grade = $this->loadModel('grade');
 
         switch ($this->action){
             case 'list':
