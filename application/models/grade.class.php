@@ -6,11 +6,14 @@ class Grade extends Model {
     private $description;
     private $type;
     private $permissions;
+    private $is_editable;
 
     public $grade_types = array(
         1 => 'Rang de site',
         2 => 'Rang de clan'
     );
+
+    public $not_editable = array(11, 12);
 
     public function get($id){
         return $this->loadGrade($this->selectOne('grade', '*', array('id' => (int)$id)));
@@ -37,6 +40,7 @@ class Grade extends Model {
         $loaded_grade->description = $this->description = $grade['description'];
         $loaded_grade->type        = $this->type        = $grade['type'];
         $loaded_grade->permissions = $this->permissions = $this->getPermissions();
+        $loaded_grade->is_editable = $this->is_editable = !in_array($this->id, $this->not_editable);
         return $loaded_grade;
     }
 

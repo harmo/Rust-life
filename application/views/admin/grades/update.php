@@ -54,7 +54,7 @@
             <div class="form-group <?php echo (isset($errors) && isset($errors['perms']) ? 'has-error' : '') ?>">
                 <label for="perms" class="col-sm-2 control-label">Permissions</label>
                 <div class="col-sm-3">
-                    <select name="perms[]" id="perms" class="perms-select" multiple="multiple">
+                    <select name="perms[]" id="perms" class="perms-select" multiple="multiple" <?php echo !$grade_to_update->is_editable ? 'disabled="disabled"' : ''; ?>>
                         <?php foreach($permissions as $permission): ?>
                             <?php if(isset($grade_to_update->permissions[$permission->id])): ?>
                                 <?php echo '<option value="'.$permission->id.'" selected="selected">'.$permission->slug.'</option>'; ?>
