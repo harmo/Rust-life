@@ -38,15 +38,15 @@ class Clan extends Model {
 
     private function loadClan($clan){
         $loaded_clan = new stdClass();
-        $loaded_clan->id        = $this->id     = $clan['id'];
-        $loaded_clan->name      = $this->name   = $clan['name'];
-        $loaded_clan->mode      = $this->mode   = $clan['mode'];
-        $loaded_clan->money    = $this->money = $clan['money'];
+        $loaded_clan->id    = $this->id     = $clan['id'];
+        $loaded_clan->name  = $this->name   = $clan['name'];
+        $loaded_clan->mode  = $this->mode   = $clan['mode'];
+        $loaded_clan->money = $this->money  = $clan['money'];
 
         $loaded_members = array();
-        $members = $this->selectAll('utilisateurs', '*', array('clan' => $this->id));
+        $members = $this->selectAll('user', '*', array('clan' => $this->id));
         foreach($members as $member){
-            $loaded_members[$member['id']] = array('login' => $member['identifiant'], 'grade' => $member['rang']);
+            $loaded_members[$member['id']] = array('login' => $member['login']/*, 'grade' => $member['rang']*/);
             if($member['id'] == $clan['owner']){
                 $loaded_clan->owner = $this->owner  = $member;
             }
@@ -59,7 +59,7 @@ class Clan extends Model {
             $loaded_requires[$require['user']] = array(
                 'id' => $require['id'],
                 'message' => $require['message'],
-                'user' => $this->selectOne('utilisateurs', '*', array('id' => $require['user']))
+                'user' => $this->selectOne('user', '*', array('id' => $require['user']))
             );
         }
         $loaded_clan->requires = $this->requires = $loaded_requires;
@@ -90,9 +90,9 @@ class Clan extends Model {
         }
 
         foreach($post['members'] as $member_id){
-            $user = $this->selectOne('utilisateurs', '*', array('id' => (int)$member_id));
+            $user = $this->selectOne('user', '*', array('id' => (int)$member_id));
             $data = array('clan' => $clan_id);
-            $this->update('utilisateurs', $data, array('id' => $user['id']));
+            $this->update('user', $data, array('id' => $user['id']));
         }
 
         return array('in_error' => false, 'success' => array('clan_id' => $clan_id));
@@ -119,9 +119,9 @@ class Clan extends Model {
         }
 
         foreach($post['members'] as $member_id){
-            $user = $this->selectOne('utilisateurs', '*', array('id' => (int)$member_id));
+            $user = $this->selectOne('user', '*', array('id' => (int)$member_id));
             $data = array('clan' => $post['clan_id']);
-            $this->update('utilisateurs', $data, array('id' => $user['id']));
+            $this->update('user', $data, array('id' => $user['id']));
         }
         if(sizeof($this->members) != sizeof($post['members'])){
             $this->unsetUsersNotIn($post['members']);
@@ -141,14 +141,14 @@ class Clan extends Model {
     public function unsetUsersNotIn($data){
         foreach($this->members as $id => $login){
             if(!in_array($id, $data)){
-                $this->update('utilisateurs', array('clan' => 'NULL'), array('id' => $id));
+                $this->update('user', array('clan' => 'NULL'), array('id' => $id));
             }
         }
     }
 
     public function unsetUsersIn($data){
         foreach($data as $id => $user){
-            $this->update('utilisateurs', array('clan' => 'NULL'), array('id' => $id));
+            $this->update('user', array('clan' => 'NULL'), array('id' => $id));
         }
     }
 

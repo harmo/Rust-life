@@ -68,7 +68,12 @@ class Model {
             $where_query .= ' WHERE ';
             $i = 1;
             foreach($where as $field => $value){
-                $where_query .= $field.'=:'.strtolower($field);
+                if($value == null){
+                    $where_query .= $field.' is NULL';
+                }
+                else {
+                    $where_query .= $field.'=:'.strtolower($field);
+                }
                 if($i < sizeof($where)){
                     $where_query .= ' AND ';
                 }
@@ -79,7 +84,9 @@ class Model {
         $this->query($query);
         if($where != null && !empty($where)){
             foreach($where as $field => $value){
-                $this->bind(':'.strtolower($field), $value);
+                if($value != null){
+                    $this->bind(':'.strtolower($field), $value);
+                }
             }
         }
     }

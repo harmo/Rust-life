@@ -26,7 +26,7 @@
                         <td><?php echo $clan->name; ?></td>
                         <td><?php echo $modes[$clan->mode]; ?></td>
                         <td><?php echo $clan->money; ?></td>
-                        <td><?php echo property_exists($clan, 'owner') ? $clan->owner['identifiant'] : 'Erreur, chef manquant !'; ?></td>
+                        <td><?php echo property_exists($clan, 'owner') ? $clan->owner['login'] : 'Erreur, chef manquant !'; ?></td>
                         <td>
                             <ul class="list-unstyled">
                                 <?php foreach($clan->members as $member): ?>

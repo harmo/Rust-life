@@ -4,6 +4,9 @@
 
 <?php if(sizeof($clans) == 0): ?>
     <div class="lead">Aucun clan</div>
+    <a href="/<?php echo BASE_URL; ?>clans/add/" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus"> Créer un clan</span>
+    </a>
 <?php else: ?>
     <?php if($user->clan == ''): ?>
         <a href="/<?php echo BASE_URL; ?>clans/add/" class="btn btn-default">
@@ -25,7 +28,7 @@
 
                 <tr <?php echo $clan->id == $user->clan ? 'class="my_clan"' : ''; ?>>
                     <td><?php echo $clan->name; ?></td>
-                    <td><?php echo $clan->owner['identifiant']; ?></td>
+                    <td><?php echo $clan->owner['login']; ?></td>
                     <td class="members">
                         <ul class="list-unstyled">
                             <?php foreach($clan->members as $id => $member): ?>
@@ -56,7 +59,7 @@
                                 </tr>
                                 <?php foreach($clan->requires as $require): ?>
                                     <tr class="line" data-id="<?php echo $require['id']; ?>">
-                                        <td class="member"><strong><?php echo $require['user']['identifiant']; ?></strong></td>
+                                        <td class="member"><strong><?php echo $require['user']['login']; ?></strong></td>
                                         <td><?php echo $require['message']; ?></td>
                                         <td class="actions text-center">
                                             <a href="#" class="accept-require" title="Accepter"><span class="glyphicon glyphicon-ok-sign"></span></a>

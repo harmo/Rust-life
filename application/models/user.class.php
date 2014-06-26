@@ -16,7 +16,7 @@ class User extends Model {
     public $lost_attempts;
 
     private $default_money = 200;
-    private $admin_grade = 10;
+    private $admin_grade = 8;
     public $user_per_page = 20;
 
     public function isAdmin(){
@@ -24,7 +24,7 @@ class User extends Model {
     }
 
     public function get($id){
-        return $this->loadUser($this->selectOne('utilisateurs', '*', array('id' => (int)$id)));
+        return $this->loadUser($this->selectOne('user', '*', array('id' => (int)$id)));
     }
 
     public function getObject($id){
@@ -34,7 +34,7 @@ class User extends Model {
 
     public function getAll($exclude_current=false, $page=1){
         $users = array();
-        $params = 'ORDER BY identifiant ASC';
+        $params = 'ORDER BY login ASC';
         if($page > 0){
             $params .= ' LIMIT '.$this->user_per_page;
         }
@@ -42,7 +42,7 @@ class User extends Model {
             $params .= ' OFFSET '.($page-1)*$this->user_per_page;
         }
         $me = $this;
-        foreach($this->selectAll('utilisateurs', '*', null, $params) as $user){
+        foreach($this->selectAll('user', '*', null, $params) as $user){
             if(!$exclude_current || ($exclude_current && $user['id'] != $me->id)){
                 $loaded_user = $this->loadUser($user);
                 $users[$loaded_user->id] = $loaded_user;
@@ -52,13 +52,13 @@ class User extends Model {
     }
 
     public function countAll(){
-        return sizeof($this->selectAll('utilisateurs', 'id'));
+        return sizeof($this->selectAll('user', 'id'));
     }
 
     public function search($data, $page=1){
         $users = array();
-        $params = 'identifiant LIKE "%'.$data.'%" OR email LIKE "%'.$data.'%" ORDER BY identifiant ASC';
-        $users_results = $this->selectAll('utilisateurs', '*', array(), $params);
+        $params = 'login LIKE "%'.$data.'%" OR email LIKE "%'.$data.'%" ORDER BY login ASC';
+        $users_results = $this->selectAll('user', '*', array(), $params);
          foreach($users_results as $user){
             $loaded_user = $this->loadUser($user);
             $users[$loaded_user->id] = $loaded_user;
@@ -68,8 +68,9 @@ class User extends Model {
 
     public function getAllWithoutClan($exclude_current=false){
         $users = array();
-        foreach($this->selectAll('utilisateurs', '*', array('clan' => ''), 'ORDER BY identifiant ASC') as $user){
-            if(!$exclude_current || ($exclude_current && $user['id'] != $this->id)){
+        $me = $this;
+        foreach($this->selectAll('user', '*', array('clan' => null), 'ORDER BY login ASC') as $user){
+            if(!$exclude_current || ($exclude_current && $user['id'] != $me->id)){
                 $loaded_user = $this->loadUser($user);
                 $users[$loaded_user->id] = $loaded_user;
             }
@@ -83,15 +84,15 @@ class User extends Model {
         }
         $user_loaded = new stdClass();
         $user_loaded->id            = $this->id             = $user['id'];
-        $user_loaded->login         = $this->login          = $user['identifiant'];
+        $user_loaded->login         = $this->login          = $user['login'];
         $user_loaded->clan          = $this->clan           = $user['clan'];
-        $user_loaded->monney        = $this->monney         = $user['argent'];
-        $user_loaded->grade         = $this->grade          = $user['rang'];
+        $user_loaded->monney        = $this->monney         = $user['money'];
+        $user_loaded->grade         = $this->grade          = $user['site_grade'];
         $user_loaded->points        = $this->points         = $user['points'];
         $user_loaded->email         = $this->email          = $user['email'];
-        $user_loaded->password      = $this->password       = $user['motdepasse'];
-        $user_loaded->datetime      = $this->datetime       = $user['date'].' '.$user['heure'];
-        $user_loaded->ip            = $this->ip             = $user['ip'];
+        $user_loaded->password      = $this->password       = $user['password'];
+        $user_loaded->datetime      = $this->datetime       = $user['datetime'];
+        $user_loaded->ip            = $this->ip             = $user['last_ip'];
         $user_loaded->blocked       = $this->blocked        = $user['blocked'] == 0 ? false : true;
         $user_loaded->lost_attempts = $this->lost_attempts  = $user['lost_attempts'];
         $user_loaded->is_admin      = $this->is_admin       = $this->isAdmin();
@@ -107,18 +108,15 @@ class User extends Model {
         $user_password = !$from_user ? $this->generatePassword() : $post['password'];
 
         $data = array(
-            'identifiant'   => $post['login'],
-            'clan'          => '',
-            'argent'        => $this->default_money,
-            'rang'          => 0,
+            'login'   => $post['login'],
+            'money'        => $this->default_money,
             'points'        => 0.0,
             'email'         => $post['email'],
-            'motdepasse'    => $this->hashPassword($user_password),
-            'date'          => date('Y-m-d'),
-            'heure'         => date('H:i:s'),
-            'ip'            => $this->getUserIp()
+            'password'    => $this->hashPassword($user_password),
+            'datetime'          => date('Y-m-d H:i:s'),
+            'last_ip'            => $this->getUserIp()
         );
-        $user_id = $this->insertOne('utilisateurs', $data);
+        $user_id = $this->insertOne('user', $data);
 
         if(!$user_id){
             return array('in_error' => true, 'errors' => array('Enregistrement de l\'utilisateur impossible'));
@@ -129,7 +127,7 @@ class User extends Model {
             'user_id' => $user_id
         );
         if($from_user){
-            $user = $this->selectOne('utilisateurs', '*', array('identifiant' => $user_id));
+            $user = $this->selectOne('user', '*', array('login' => $user_id));
             $success['user'] = $this->loadUser($user);
         }
         return array('in_error' => false, 'success' => $success);
@@ -142,11 +140,11 @@ class User extends Model {
         }
 
         try {
-            $users = $this->selectAll('utilisateurs', '*', array('identifiant' => $post['login']));
+            $users = $this->selectAll('user', '*', array('login' => $post['login']));
             if(sizeof($users) > 1){
                 $user_found = false;
                 foreach($users as $user){
-                    if($user['identifiant'] == $post['login']){
+                    if($user['login'] == $post['login']){
                         $user_found = $user;
                     }
                 }
@@ -165,11 +163,10 @@ class User extends Model {
 
             $success = array('user_id' => $user['id']);
             $data = array(
-                'date'  => $this->escapeString(date('Y-m-d')),
-                'heure' => $this->escapeString(date('H:i:s')),
-                'ip'    => $this->escapeString($this->getUserIp())
+                'datetime'  => $this->escapeString(date('Y-m-d H:i:s')),
+                'last_ip'    => $this->escapeString($this->getUserIp())
             );
-            if(!$this->update('utilisateurs', $data, array('id' => $user['id']))){
+            if(!$this->update('user', $data, array('id' => $user['id']))){
                 return array('in_error' => true, 'errors' => array('Mise à jour des informations de connexion impossible'));
             }
             return array('in_error' => false, 'success' => $success);
@@ -188,7 +185,7 @@ class User extends Model {
 
         $data = array();
         if(isset($post['login'])){
-            $data['identifiant'] = $this->escapeString($post['login']);
+            $data['login'] = $this->escapeString($post['login']);
         }
 
         if(isset($post['email'])){
@@ -196,11 +193,11 @@ class User extends Model {
         }
 
         if(isset($post['password']) && $post['password'] != ''){
-            $data['motdepasse'] = $this->escapeString($this->hashPassword($post['password']));
+            $data['password'] = $this->escapeString($this->hashPassword($post['password']));
         }
         if($by == 'admin'){
             $data['clan']   = $post['clan'] != '' ? $post['clan'] : 'NULL';
-            $data['argent'] = $post['monney'] != '' ? $post['monney'] : $this->default_money;
+            $data['money'] = $post['monney'] != '' ? $post['monney'] : $this->default_money;
             $data['rang']   = $post['grade'] != '' ? $post['grade'] : 0;
             $data['points'] = $post['points'] != '' ? $post['points'] : 0.0;
         }
@@ -215,7 +212,7 @@ class User extends Model {
             $data['blocked'] = $post['blocked'];
         }
 
-        if(!$this->update('utilisateurs', $data, array('id' => $post['user_id']))){
+        if(!$this->update('user', $data, array('id' => $post['user_id']))){
             return array('in_error' => true, 'errors' => array('Enregistrement de l\'utilisateur impossible'));
         }
         return array('in_error' => false, 'success' => true);
@@ -228,22 +225,22 @@ class User extends Model {
                 return array('in_error' => true, 'errors' => array('Ce membre est chef du clan <strong>'.$loaded_clan->name.'</strong>, suppression impossible'));
             }
         }
-        if(!$this->delete('utilisateurs', array('id' => $this->id))){
+        if(!$this->delete('user', array('id' => $this->id))){
             return array('in_error' => true, 'errors' => array('Suppression du membre impossible'));
         }
         return array('in_error' => false, 'success' => true);
     }
 
     public function loginLost($email){
-        $user = $this->selectOne('utilisateurs', '*', array('email' => $email));
+        $user = $this->selectOne('user', '*', array('email' => $email));
 
         if(!$user){
             return array('in_error' => true, 'errors' => array('Adresse e-mail introuvable'));
         }
 
-        $message = 'Vous avez effectu&eacute; une demande de r&eacute;cup&eacute;ration d\'identifiant sur le site rust-life.fr.
-            '."\n".'Votre adresse e-amil est li&eacute;e à l\'identifiant : '.$user['identifiant'];
-        if(!mail($user['email'], '[Rust-life.fr] R&eacute;cup&eacute;ration d\'identifiant', $message)){
+        $message = 'Vous avez effectu&eacute; une demande de r&eacute;cup&eacute;ration d\'login sur le site rust-life.fr.
+            '."\n".'Votre adresse e-amil est li&eacute;e à l\'login : '.$user['login'];
+        if(!mail($user['email'], '[Rust-life.fr] R&eacute;cup&eacute;ration d\'login', $message)){
             return array('in_error' => true, 'errors' => array('Impossible d\'envoyer le mail'));
         }
 
@@ -254,19 +251,19 @@ class User extends Model {
     }
 
     public function passwordLost($login){
-        $users = $this->selectAll('utilisateurs', '*', array('identifiant' => $login));
+        $users = $this->selectAll('user', '*', array('login' => $login));
         if(!$users){
-            return array('in_error' => true, 'errors' => array('Identifiant introuvable'));
+            return array('in_error' => true, 'errors' => array('login introuvable'));
         }
         elseif(sizeof($users) > 1){
             $user_found = false;
             foreach($users as $user){
-                if($user['identifiant'] == $login){
+                if($user['login'] == $login){
                     $user_found = $user;
                 }
             }
             if(!$user_found){
-                return array('in_error' => true, 'errors' => array('Probl&eagrav;me sur l\'identifiant !'));
+                return array('in_error' => true, 'errors' => array('Probl&eagrav;me sur l\'login !'));
             }
         }
         elseif(sizeof($users) == 1){
@@ -293,12 +290,12 @@ class User extends Model {
             return array('in_error' => true, 'errors' => $errors);
         }
 
-        $user = $this->selectOne('utilisateurs', '*', array('id' => (int)$user_id));
+        $user = $this->selectOne('user', '*', array('id' => (int)$user_id));
         if(!$user){
             return array('in_error' => true, 'errors' => array('Utilisateur introuvable'));
         }
-        $data = array('motdepasse' => $this->escapeString($this->hashPassword($post['password'])));
-        if(!$this->update('utilisateurs', $data, array('id' => (int)$user_id))){
+        $data = array('password' => $this->escapeString($this->hashPassword($post['password'])));
+        if(!$this->update('user', $data, array('id' => (int)$user_id))){
             return array('in_error' => true, 'errors' => array('Mise à jour du mot de passe impossible'));
         }
         return array('in_error' => false, 'success' => true);
@@ -309,17 +306,17 @@ class User extends Model {
 
         if(isset($data['login'])){
             if($data['login'] == ''){
-                $errors['login'] = 'Identifiant vide';
+                $errors['login'] = 'login vide';
             }
             elseif(strlen($data['login']) > 64 || strlen($data['login']) < 2){
-                $errors['login'] = 'L\'identifiant doit contenir entre 2 et 64 caract&eagrav;res';
+                $errors['login'] = 'L\'login doit contenir entre 2 et 64 caract&eagrav;res';
             }
             elseif(preg_match('/^[a-z\d-_.]{2,64}$/i', $data['login']) == 0){
-                $errors['login'] = 'L\'identifiant ne doit pas contenir de caract&eagrav;res sp&eacute;ciaux';
+                $errors['login'] = 'L\'login ne doit pas contenir de caract&eagrav;res sp&eacute;ciaux';
             }
             if(!$login && !$updating){
-                $existing_user = $this->selectOne('utilisateurs', array('id', 'identifiant'), array('identifiant' => $data['login']));
-                if($existing_user && $existing_user['identifiant'] == $data['login']){
+                $existing_user = $this->selectOne('user', array('id', 'login'), array('login' => $data['login']));
+                if($existing_user && $existing_user['login'] == $data['login']){
                     $errors['login'] = 'Utilisateur existant';
                 }
             }
@@ -333,7 +330,7 @@ class User extends Model {
                 $errors['email'] = 'Format d\'adresse e-mail invalide';
             }
             if(!$updating){
-                $existing_user = $this->selectOne('utilisateurs', 'id', array('email' => $data['email']));
+                $existing_user = $this->selectOne('user', 'id', array('email' => $data['email']));
                 if($existing_user){
                     $errors['email'] = 'Utilisateur existant';
                 }
@@ -345,26 +342,26 @@ class User extends Model {
                 $errors['password'] = 'Mot de passe vide';
             }
             elseif(!$from_user && !isset($errors['login'])){
-                $users = $this->selectAll('utilisateurs', array('identifiant', 'motdepasse'), array('identifiant' => $data['login']));
+                $users = $this->selectAll('user', array('login', 'password'), array('login' => $data['login']));
                 if(!$users){
                     $errors['login'] = 'Utilisateur introuvable';
                 }
                 elseif(sizeof($users) > 1){
                     $user_found = false;
                     foreach($users as $user){
-                        if($user['identifiant'] == $data['login']){
+                        if($user['login'] == $data['login']){
                             $user_found = $user;
                         }
                     }
                     if(!$user_found){
-                        $errors['login'] = 'Probl&eagrav;me sur l\'identifiant !';
+                        $errors['login'] = 'Probl&eagrav;me sur l\'login !';
                     }
                     $user = $user_found;
                 }
                 elseif(sizeof($users) == 1){
                     $user = $users[0];
                 }
-                elseif($user && !$this->checkPassword($data['password'], $user['motdepasse'])){
+                elseif($user && !$this->checkPassword($data['password'], $user['password'])){
                     $errors['password'] = 'Mot de passe erron&eacute;';
                 }
             }
@@ -418,7 +415,7 @@ class User extends Model {
             $user['blocked'] = true;
             $this->updateData(array('blocked' => 1, 'user_id' => $user['id']));
             global $config;
-            $message = 'Bonjour,'."\n".'Le compte de '.$user['identifiant'].' ('.$user['email'].') est bloqué.';
+            $message = 'Bonjour,'."\n".'Le compte de '.$user['login'].' ('.$user['email'].') est bloqué.';
             foreach($config['admins'] as $admin_mail){
                 mail($admin_mail, '[Rust-life.fr] Compte bloqué', $message);
             }

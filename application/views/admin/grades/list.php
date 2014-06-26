@@ -22,7 +22,7 @@
                         <td>
                             <ul>
                                 <?php foreach($grade->permissions as $perm): ?>
-                                    <li><?php echo $permissions[$perm]->description; ?></li>
+                                    <li><?php echo '('.$perm['slug'].') '.$perm['description']; ?></li>
                                 <?php endforeach; ?>
                             </ul>
                         <td>
