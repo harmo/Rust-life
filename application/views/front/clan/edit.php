@@ -119,7 +119,7 @@
         <div class="form-group">
             <label for="members" class="col-sm-2 control-label">Membres</label>
             <div class="col-sm-10">
-                <table class="table table-striped">
+                <table class="table table-striped clan-members">
                     <thead>
                         <th>Identifiant</th>
                         <th>Grade</th>
@@ -130,7 +130,11 @@
                             <tr>
                                 <td><?php echo $member['login']; ?></td>
                                 <td><?php echo $member['grade']->name; ?></td>
-                                <td></td>
+                                <td>
+                                    <span class="glyphicon glyphicon-arrow-up"></span>
+                                    <span class="glyphicon glyphicon-arrow-down"></span>
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

@@ -38,7 +38,7 @@ class Clans extends Controller {
                     $loaded_clan = $clan->getObject($this->params[0]);
                     if($user_object->clan != ''){
                         if(!$loaded_clan->removeUser($user_object)){
-                            $template->set('errors', 'Impossible de rejoindre ce clan');
+                            $template->set('errors', 'Impossible de partir de ce clan');
                         }
                         else {
                             $this->redirect('clans');
