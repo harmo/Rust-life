@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `beta` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `beta`;
+CREATE DATABASE  IF NOT EXISTS `alpha` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `alpha`;
 -- MySQL dump 10.14  Distrib 5.5.37-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: beta
+-- Host: 127.0.0.1    Database: alpha
 -- ------------------------------------------------------
 -- Server version	5.5.37-MariaDB-log
 
