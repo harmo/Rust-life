@@ -71,8 +71,10 @@
                                         </ul>
                                     </td>
                                     <td class="grade-actions">
-                                        <a href="#" class="edit-grade" title="Éditer"><span class="glyphicon glyphicon-pencil"></span></a>
-                                        <a href="#" class="delete-grade" title="Supprimer" data-clan-id="<?php echo $clan->id; ?>"><span class="glyphicon glyphicon-remove"></span></a>
+                                        <?php if($grade['deletable']): ?>
+                                            <a href="#" class="edit-grade" title="Éditer"><span class="glyphicon glyphicon-pencil"></span></a>
+                                            <a href="#" class="delete-grade" title="Supprimer" data-clan-id="<?php echo $clan->id; ?>"><span class="glyphicon glyphicon-remove"></span></a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                                 <tr class="edit-grade-line">
@@ -131,9 +133,20 @@
                                 <td><?php echo $member['login']; ?></td>
                                 <td><?php echo $member['grade']->name; ?></td>
                                 <td>
-                                    <span class="glyphicon glyphicon-arrow-up"></span>
-                                    <span class="glyphicon glyphicon-arrow-down"></span>
-                                    <span class="glyphicon glyphicon-remove"></span>
+                                    <?php if(has_permission($user, 'clan_promote_member') && $member['grade']->promotable): ?>
+                                        <a href="#" class="member-promote-link" data-id-member="<?php echo $id; ?>" data-id-clan="<?php echo $clan->id; ?>" data-id-grade="<?php echo $member['grade']->id; ?>">
+                                            <span class="glyphicon glyphicon-arrow-up"></span></a>
+                                    <?php endif; ?>
+
+                                    <?php if(has_permission($user, 'clan_demean_member') && $member['grade']->demeanable && $id != $clan->owner['id']): ?>
+                                        <a href="#" class="member-demean-link" data-id-member="<?php echo $id; ?>" data-id-clan="<?php echo $clan->id; ?>" data-id-grade="<?php echo $member['grade']->id; ?>">
+                                            <span class="glyphicon glyphicon-arrow-down"></span></a>
+                                    <?php endif; ?>
+
+                                    <?php if(has_permission($user, 'clan_expulse_member') && $id != $clan->owner['id']): ?>
+                                        <a href="#" class="member-remove-link" data-id-member="<?php echo $id; ?>" data-id-clan="<?php echo $clan->id; ?>" data-id-grade="<?php echo $member['grade']->id; ?>">
+                                            <span class="glyphicon glyphicon-remove"></span></a>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

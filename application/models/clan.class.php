@@ -20,7 +20,7 @@ class Clan extends Model {
     public static $ON_DEMAND = 3;
 
     public $clan_chief_grade = 11;
-    public $clan_member_grade = 12;
+    public $clan_member_grade = 999999;
 
     public function get($id){
         return $this->loadClan($this->selectOne('clan', '*', array('id' => (int)$id)));
@@ -47,6 +47,8 @@ class Clan extends Model {
         $loaded_clan->mode  = $this->mode   = $clan['mode'];
         $loaded_clan->money = $this->money  = $clan['money'];
 
+        $grades = $this->selectAll('clan_grade', '*', array('id_clan' => $this->id), 'ORDER BY id_grade ASC');
+
         $loaded_members = array();
         $members = $this->selectAll('user', '*', array('clan' => $this->id));
         foreach($members as $member){
@@ -54,6 +56,8 @@ class Clan extends Model {
             if($member['clan_grade'] != null){
                 $grade_class = new Grade();
                 $grade = $grade_class->get((int)$member['clan_grade']);
+                $grade->promotable = $grade->id > array_values($grades)[1]['id_grade'] ? true : false;
+                $grade->demeanable = $grade->id < array_values($grades)[sizeof($grades) - 1]['id_grade'] ? true : false;
             }
             $loaded_members[$member['id']] = array(
                 'login' => $member['login'],
@@ -77,12 +81,12 @@ class Clan extends Model {
         $loaded_clan->requires = $this->requires = $loaded_requires;
 
         $loaded_grades = array();
-        $grades = $this->selectAll('clan_grade', '*', array('id_clan' => $this->id));
         foreach($grades as $grade){
             $perms = array_column($this->selectAll('grade_permission', 'id_permission', array('id_grade' => $grade['id_grade'])), 'id_permission');
-            $loaded_grades[$grade['id']] = $this->selectOne('grade', '*', array('id' => $grade['id_grade']));
+            $loaded_grades[$grade['id_grade']] = $this->selectOne('grade', '*', array('id' => $grade['id_grade']));
             $permission_class = new Permission();
-            $loaded_grades[$grade['id']]['permissions'] = $permission_class->getMultiple(array_values($perms));
+            $loaded_grades[$grade['id_grade']]['permissions'] = $permission_class->getMultiple(array_values($perms));
+            $loaded_grades[$grade['id_grade']]['deletable'] = ($grade['id'] == array_values($grades)[0]['id'] || $grade['id'] == array_values($grades)[sizeof($grades) - 1]['id']) ? false : true;
         }
         $loaded_clan->grades = $this->grades = $loaded_grades;
 
@@ -299,5 +303,31 @@ class Clan extends Model {
         $grade_class = new Grade();
         $grade = $grade_class->getObject($post['id_grade']);
         return $grade->remove();
+    }
+
+    public function promoteMember($member_id, $current_grade_id){
+        return $this->updateMemberGrade($member_id, $current_grade_id, -1);
+    }
+
+    public function demeanMember($member_id, $current_grade_id){
+        return $this->updateMemberGrade($member_id, $current_grade_id, 1);
+    }
+
+    private function updateMemberGrade($member_id, $current_grade_id, $index){
+        $current_index = array_search($current_grade_id, array_keys($this->grades));
+        $new_grade_id = array_keys($this->grades)[$current_index + $index];
+        $user_class = new user();
+        $user_class = $user_class->getObject($member_id);
+        $update = $user_class->updateData(array('user_id' => $member_id, 'clan_grade' => $new_grade_id));
+        if($update['in_error']){
+            return $update;
+        }
+        return array('in_error' => false, 'grade' => $this->grades[$new_grade_id]['name']);
+    }
+
+    public function removeMember($member_id){
+        $user_class = new user();
+        $user_class = $user_class->getObject($member_id);
+        return $user_class->updateData(array('user_id' => $member_id, 'clan' => 'NULL'));
     }
 }

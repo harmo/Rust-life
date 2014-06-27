@@ -99,6 +99,22 @@ jQuery(document).ready(function($){
         $('table.clan-grades').show();
     }
 
+
+    $('.clan-members').on('click', '.member-promote-link', function(e){
+        e.preventDefault();
+        Clan.promote_member($(this).data('id-member'), $(this).data('id-clan'), $(this).data('id-grade'));
+    });
+
+    $('.clan-members').on('click', '.member-demean-link', function(e){
+        e.preventDefault();
+        Clan.demean_member($(this).data('id-member'), $(this).data('id-clan'), $(this).data('id-grade'));
+    });
+
+    $('.clan-members').on('click', '.member-remove-link', function(e){
+        e.preventDefault();
+        Clan.remove_member($(this).data('id-member'), $(this).data('id-clan'));
+    });
+
 });
 
 
@@ -293,5 +309,57 @@ var Clan = {
                 });
             }
         });
-    }
+    },
+
+    promote_member: function(member_id, clan_id, grade_id){
+        $.ajax({
+            url: BASE_URL+'clans/promote_member',
+            method: 'post',
+            data: {member_id: member_id, clan_id: clan_id, grade_id: grade_id},
+            dataType: 'json',
+            success: function(response){
+                if(response.in_error){
+                    alertify.error(response.message);
+                }
+                else {
+                    alertify.success('Membre promut au rang de '+response.grade+'.');
+                    window.setTimeout(function(){window.location.reload();}, 1500);
+                }
+            }
+        });
+    },
+    demean_member: function(member_id, clan_id, grade_id){
+        $.ajax({
+            url: BASE_URL+'clans/demean_member',
+            method: 'post',
+            data: {member_id: member_id, clan_id: clan_id, grade_id: grade_id},
+            dataType: 'json',
+            success: function(response){
+                if(response.in_error){
+                    alertify.error(response.message);
+                }
+                else {
+                    alertify.success('Membre rétrogradé au rang de '+response.grade+'.');
+                    window.setTimeout(function(){window.location.reload();}, 1500);
+                }
+            }
+        });
+    },
+    remove_member: function(member_id, clan_id){
+        $.ajax({
+            url: BASE_URL+'clans/remove_member',
+            method: 'post',
+            data: {member_id: member_id, clan_id: clan_id},
+            dataType: 'json',
+            success: function(response){
+                if(response.in_error){
+                    alertify.error(response.message);
+                }
+                else {
+                    alertify.success('Membre expulsé du clan.');
+                    window.setTimeout(function(){window.location.reload();}, 1500);
+                }
+            }
+        });
+    },
 }

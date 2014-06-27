@@ -41,7 +41,7 @@
                     <tr>
                         <td><?php echo $user->login; ?></td>
                         <td><?php echo $user->email; ?></td>
-                        <td><?php echo $user->grade; ?></td>
+                        <td><?php echo $grades[$user->site_grade]->name; ?></td>
                         <td><?php echo $user->points; ?></td>
                         <td><?php echo $user->monney; ?></td>
                         <td><?php echo isset($clans[$user->clan]) ? $clans[$user->clan]->name : '-'; ?></td>

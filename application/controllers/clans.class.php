@@ -171,6 +171,21 @@ class Clans extends Controller {
                         die(json_encode($loaded_clan->removeGrade($_POST)));
                     }
                     break;
+
+                case 'promote_member':
+                    $loaded_clan = $clan->getObject($_POST['clan_id']);
+                    die(json_encode($loaded_clan->promoteMember($_POST['member_id'], $_POST['grade_id'])));
+                    break;
+
+                case 'demean_member':
+                    $loaded_clan = $clan->getObject($_POST['clan_id']);
+                    die(json_encode($loaded_clan->demeanMember($_POST['member_id'], $_POST['grade_id'])));
+                    break;
+
+                case 'remove_member':
+                    $loaded_clan = $clan->getObject($_POST['clan_id']);
+                    die(json_encode($loaded_clan->removeMember($_POST['member_id'])));
+                    break;
             }
         }
 
@@ -183,8 +198,11 @@ class Clans extends Controller {
         $template->set('clans', $clan->getAll());
         $template->set('user', $user->get($user_id));
 
-
         $template->render();
     }
 
+}
+
+function has_permission($user, $slug){
+    return isset($user->permissions[$slug]);
 }

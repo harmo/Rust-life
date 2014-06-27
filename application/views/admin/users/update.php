@@ -45,7 +45,11 @@
             <div class="form-group <?php echo (isset($errors) && isset($errors['grade']) ? 'has-error' : '') ?>">
                 <label for="grade" class="col-sm-4 control-label">Rang</label>
                 <div class="col-sm-3">
-                    <input type="text" name="grade" class="form-control" id="grade" value="<?php echo $user_to_update->grade; ?>">
+                    <select name="clan" id="clan" class="form-control clan-select">
+                        <?php foreach($grades as $grade): ?>
+                            <?php echo '<option value="'.$grade->id.'" '.($grade->id == $user_to_update->site_grade  ? 'selected="selected"' : '').'>'.$grade->name.'</option>'; ?>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
             </div>
             <div class="form-group <?php echo (isset($errors) && isset($errors['points']) ? 'has-error' : '') ?>">
@@ -60,17 +64,21 @@
                     <input type="text" name="monney" class="form-control" id="monney" value="<?php echo $user_to_update->monney; ?>">
                 </div>
             </div>
-            <div class="form-group <?php echo (isset($errors) && isset($errors['clan']) ? 'has-error' : '') ?>">
-                <label for="clan" class="col-sm-4 control-label">Clan</label>
-                <div class="col-sm-3">
-                    <select name="clan" id="clan" class="form-control clan-select">
-                        <option value="">-- Choisir --</option>
-                        <?php foreach($clans as $id => $clan): ?>
-                            <?php echo '<option value="'.$id.'"'.($id == $user_to_update->clan  ? 'selected="selected"' : '').'>'.$clan->name.'</option>'; ?>
-                        <?php endforeach; ?>
-                    </select>
+
+            <?php if(sizeof($clans) > 0): ?>
+                <div class="form-group <?php echo (isset($errors) && isset($errors['clan']) ? 'has-error' : '') ?>">
+                    <label for="clan" class="col-sm-4 control-label">Clan</label>
+                    <div class="col-sm-3">
+                        <select name="clan" id="clan" class="form-control clan-select">
+                            <option value="">-- Choisir --</option>
+                            <?php foreach($clans as $id => $clan): ?>
+                                <?php echo '<option value="'.$id.'"'.($id == $user_to_update->clan  ? 'selected="selected"' : '').'>'.$clan->name.'</option>'; ?>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
-            </div>
+            <?php endif; ?>
+
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-3">
                     <button type="submit" name="update_user" class="btn btn-primary">Mettre à jour</button>

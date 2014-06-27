@@ -5,7 +5,8 @@ class User extends Model {
     public $login;
     public $clan;
     public $monney;
-    public $grade;
+    public $site_grade;
+    public $clan_grade;
     public $points;
     public $email;
     public $password;
@@ -14,13 +15,14 @@ class User extends Model {
     public $is_admin;
     public $blocked;
     public $lost_attempts;
+    public $permissions;
 
     private $default_money = 200;
     private $admin_grade = 8;
     public $user_per_page = 20;
 
     public function isAdmin(){
-        return $this->grade == $this->admin_grade;
+        return $this->site_grade == $this->admin_grade;
     }
 
     public function get($id){
@@ -87,7 +89,8 @@ class User extends Model {
         $user_loaded->login         = $this->login          = $user['login'];
         $user_loaded->clan          = $this->clan           = $user['clan'];
         $user_loaded->monney        = $this->monney         = $user['money'];
-        $user_loaded->grade         = $this->grade          = $user['site_grade'];
+        $user_loaded->site_grade    = $this->site_grade     = $user['site_grade'];
+        $user_loaded->clan_grade    = $this->clan_grade     = $user['clan_grade'] != null ? $user['clan_grade'] : 999999;
         $user_loaded->points        = $this->points         = $user['points'];
         $user_loaded->email         = $this->email          = $user['email'];
         $user_loaded->password      = $this->password       = $user['password'];
@@ -96,6 +99,7 @@ class User extends Model {
         $user_loaded->blocked       = $this->blocked        = $user['blocked'] == 0 ? false : true;
         $user_loaded->lost_attempts = $this->lost_attempts  = $user['lost_attempts'];
         $user_loaded->is_admin      = $this->is_admin       = $this->isAdmin();
+        $user_loaded->permissions   = $this->permissions    = $this->loadPermissions();
         return $user_loaded;
     }
 
@@ -196,14 +200,15 @@ class User extends Model {
             $data['password'] = $this->escapeString($this->hashPassword($post['password']));
         }
         if($by == 'admin'){
-            $data['clan']   = $post['clan'] != '' ? $post['clan'] : 'NULL';
             $data['money'] = $post['monney'] != '' ? $post['monney'] : $this->default_money;
-            $data['rang']   = $post['grade'] != '' ? $post['grade'] : 0;
             $data['points'] = $post['points'] != '' ? $post['points'] : 0.0;
         }
         elseif(isset($post['clan'])){
             $data['clan'] = $post['clan'];
         }
+
+        $data['clan_grade'] = isset($post['clan_grade']) && $post['clan_grade'] != '' ? $post['clan_grade'] : 999999;
+        $data['site_grade'] = isset($post['site_grade']) && $post['site_grade'] != '' ? $post['site_grade'] : 7;
 
         if(isset($post['lost_attempts'])){
             $data['lost_attempts'] = $post['lost_attempts'];
@@ -428,6 +433,16 @@ class User extends Model {
         $this->blocked = 0;
         $data = array('user_id' => $this->id, 'lost_attempts' => $this->lost_attempts, 'blocked' => $this->blocked);
         return $this->updateData($data);
+    }
+
+    private function loadPermissions(){
+        $grade_permissions = $this->selectAll('grade_permission', '*', null, 'WHERE id_grade IN ('.$this->site_grade.', '.$this->clan_grade.')');
+        $grade_permissions = implode(', ', array_unique(array_column($grade_permissions, 'id_permission')));
+        $permissions = array();
+        foreach($this->selectAll('permission', '*', null, 'WHERE id IN ('.$grade_permissions.')') as $perm){
+            $permissions[$perm['slug']] = $perm;
+        }
+        return $permissions;
     }
 
 }

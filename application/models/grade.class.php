@@ -8,12 +8,15 @@ class Grade extends Model {
     private $permissions;
     private $is_editable;
 
+    const SITE_GRADE = 1;
+    const CLAN_GRADE = 2;
+
     public $grade_types = array(
-        1 => 'Rang de site',
-        2 => 'Rang de clan'
+        self::SITE_GRADE => 'Rang de site',
+        self::CLAN_GRADE => 'Rang de clan'
     );
 
-    public $not_editable = array(11, 12);
+    public $not_editable = array(7, 8, 11, 12);
 
     public function get($id){
         return $this->loadGrade($this->selectOne('grade', '*', array('id' => (int)$id)));
@@ -24,11 +27,13 @@ class Grade extends Model {
         return $this;
     }
 
-    public function getAll(){
+    public function getAll($type=null){
         $grades = array();
         foreach($this->selectAll('grade', '*') as $grade){
-            $loaded_grade = $this->loadGrade($grade);
-            $grades[$loaded_grade->id] = $loaded_grade;
+            if($type == null || $type == $grade['type']){
+                $loaded_grade = $this->loadGrade($grade);
+                $grades[$loaded_grade->id] = $loaded_grade;
+            }
         }
         return $grades;
     }

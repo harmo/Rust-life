@@ -13,6 +13,8 @@ class Users extends Controller {
             $this->redirect('login', 'admin/users');
         }
         $user = $this->loadModel('user');
+        $grade = $this->loadModel('grade');
+        $permission = $this->loadModel('permission');
         $user_session = $user->get($user_id);
         if(!$user_session->is_admin){
             $this->redirect('');
@@ -128,6 +130,8 @@ class Users extends Controller {
                 $this->template->set('title', 'Membres');
                 break;
         }
+
+        $this->template->set('grades', $grade->getAll($grade::SITE_GRADE));
 
         $this->template->set('static', $this->staticFiles);
         $this->template->addJs('tablesorter/jquery.tablesorter.min', 'vendor');
