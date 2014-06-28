@@ -15,7 +15,8 @@ class Clans extends Controller {
         $template->set('static', $this->staticFiles);
         $user = $this->loadModel('user');
         $user_object = $user->getObject($user_id);
-        $clan = $this->loadModel('clan');
+        $clan_class = $this->loadModel('clan');
+        $load_all_clans = true;
         $grade = $this->loadModel('grade');
         $permission = $this->loadModel('permission');
 
@@ -24,7 +25,7 @@ class Clans extends Controller {
             switch ($this->action) {
                 case 'join':
                     if($user_object->clan == ''){
-                        $loaded_clan = $clan->getObject($this->params[0]);
+                        $loaded_clan = $clan_class->getObject($this->params[0]);
                         if(!$loaded_clan->addUser($user_object)){
                             $template->set('errors', 'Impossible de rejoindre ce clan');
                         }
@@ -35,7 +36,7 @@ class Clans extends Controller {
                     break;
 
                 case 'unjoin':
-                    $loaded_clan = $clan->getObject($this->params[0]);
+                    $loaded_clan = $clan_class->getObject($this->params[0]);
                     if($user_object->clan != ''){
                         if(!$loaded_clan->removeUser($user_object)){
                             $template->set('errors', 'Impossible de partir de ce clan');
@@ -47,7 +48,7 @@ class Clans extends Controller {
                     break;
 
                 case 'cancel':
-                    $loaded_clan = $clan->getObject($this->params[0]);
+                    $loaded_clan = $clan_class->getObject($this->params[0]);
                     if(!$loaded_clan->cancelInvitation($user_object)){
                         $template->set('errors', 'Impossible d\'annuler la demande');
                     }
@@ -57,7 +58,7 @@ class Clans extends Controller {
                     break;
 
                 case 'remove':
-                    $loaded_clan = $clan->getObject($this->params[0]);
+                    $loaded_clan = $clan_class->getObject($this->params[0]);
                     if($loaded_clan->owner['id'] != $user_object->id){
                         $this->redirect('clans');
                     }
@@ -85,7 +86,7 @@ class Clans extends Controller {
                     if(isset($_POST['add_clan'])){
                         $_POST['members'] = isset($_POST['members']) ? $_POST['members'] : array();
                         array_push($_POST['members'], $_POST['owner']);
-                        $create = $clan->create($_POST);
+                        $create = $clan_class->create($_POST);
                         if($create['in_error']){
                             $template->set('errors', $create['errors']);
                         }
@@ -96,17 +97,17 @@ class Clans extends Controller {
                     break;
 
                 case 'edit':
-                    $loaded_clan = $clan->getObject($this->params[0]);
+                    $loaded_clan = $clan_class->getObject($this->params[0]);
                     if($loaded_clan->owner['id'] != $user_object->id){
                         $this->redirect('clans');
                     }
-
                     $template = $this->loadView('front/clan/edit');
                     $template->set('static', $this->staticFiles);
                     $template->addCss('select2-3.4.1/select2', 'vendor');
                     $template->addJs('select2-3.4.1/select2.min', 'vendor');
                     $template->set('users', $user_object->getAll(true, 0));
                     $template->set('clan', $loaded_clan);
+                    $load_all_clans = false;
                     $template->set('permissions', $permission->getAllForClanOwner());
 
                     if(isset($_POST['submit_edit_grade'])){
@@ -127,14 +128,14 @@ class Clans extends Controller {
             switch ($this->action) {
                 case 'require':
                     if($user->clan == ''){
-                        $loaded_clan = $clan->getObject($_POST['clan_id']);
+                        $loaded_clan = $clan_class->getObject($_POST['clan_id']);
                         die(json_encode($loaded_clan->requireInvitation($user, $_POST['message'])));
                     }
                     break;
 
                 case 'accept_require':
-                    $require = $clan->getRequire($_POST['require_id']);
-                    $loaded_clan = $clan->getObject($require['clan']);
+                    $require = $clan_class->getRequire($_POST['require_id']);
+                    $loaded_clan = $clan_class->getObject($require['clan']);
                     if($user->id == $loaded_clan->owner['id']){
                         $user_required = $user->getObject($require['user']);
                         die(json_encode($loaded_clan->acceptRequire($require, $user_required)));
@@ -142,8 +143,8 @@ class Clans extends Controller {
                     break;
 
                 case 'refuse_require':
-                    $require = $clan->getRequire($_POST['require_id']);
-                    $loaded_clan = $clan->getObject($require['clan']);
+                    $require = $clan_class->getRequire($_POST['require_id']);
+                    $loaded_clan = $clan_class->getObject($require['clan']);
                     if($user->id == $loaded_clan->owner['id']){
                         $user_required = $user->getObject($require['user']);
                         die(json_encode($loaded_clan->refuseRequire($require, $user_required)));
@@ -151,7 +152,7 @@ class Clans extends Controller {
                     break;
 
                 case 'change_owner':
-                    $loaded_clan = $clan->getObject($_POST['clan']);
+                    $loaded_clan = $clan_class->getObject($_POST['clan']);
                     if($user->id == $loaded_clan->owner['id']){
                         $loaded_user = $user->get($_POST['user']);
                         die(json_encode($loaded_clan->changeOwner($loaded_user)));
@@ -159,31 +160,31 @@ class Clans extends Controller {
                     break;
 
                 case 'add_grade':
-                    $loaded_clan = $clan->getObject($_POST['clan_id']);
+                    $loaded_clan = $clan_class->getObject($_POST['clan_id']);
                     if($user->id == $loaded_clan->owner['id']){
                         die(json_encode($loaded_clan->addGrade($_POST)));
                     }
                     break;
 
                 case 'delete_grade':
-                    $loaded_clan = $clan->getObject($_POST['clan_id']);
+                    $loaded_clan = $clan_class->getObject($_POST['clan_id']);
                     if($user->id == $loaded_clan->owner['id']){
                         die(json_encode($loaded_clan->removeGrade($_POST)));
                     }
                     break;
 
                 case 'promote_member':
-                    $loaded_clan = $clan->getObject($_POST['clan_id']);
+                    $loaded_clan = $clan_class->getObject($_POST['clan_id']);
                     die(json_encode($loaded_clan->promoteMember($_POST['member_id'], $_POST['grade_id'])));
                     break;
 
                 case 'demean_member':
-                    $loaded_clan = $clan->getObject($_POST['clan_id']);
+                    $loaded_clan = $clan_class->getObject($_POST['clan_id']);
                     die(json_encode($loaded_clan->demeanMember($_POST['member_id'], $_POST['grade_id'])));
                     break;
 
                 case 'remove_member':
-                    $loaded_clan = $clan->getObject($_POST['clan_id']);
+                    $loaded_clan = $clan_class->getObject($_POST['clan_id']);
                     die(json_encode($loaded_clan->removeMember($_POST['member_id'])));
                     break;
             }
@@ -194,8 +195,10 @@ class Clans extends Controller {
         $template->addCss('alertify-0.3.11/css/alertify.default', 'vendor');
         $template->addJs('clans');
         $template->set('title', 'Clans');
-        $template->set('clan_modes', $clan->available_modes);
-        $template->set('clans', $clan->getAll());
+        $template->set('clan_modes', $clan_class->available_modes);
+        if($load_all_clans){
+            $template->set('clans', $clan_class->getAll());
+        }
         $template->set('user', $user->get($user_id));
 
         $template->render();
